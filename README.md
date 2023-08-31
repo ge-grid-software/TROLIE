@@ -2,7 +2,7 @@
 
 Transmission Ratings and Operating Limits Information Exchange
 
-[OpenAPI Specification docs](https://ge-grid-software/.github.io/TROLIE/)
+[OpenAPI Specification docs](https://ge-grid-software.github.io/TROLIE/)
 
 ### License
 
