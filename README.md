@@ -2,8 +2,8 @@
 
 Transmission Ratings and Operating Limits Information Exchange
 
-[OpenAPI Specification docs](https://misoenergy.github.io/TROLIE/)
+[OpenAPI Specification docs](https://ge-grid-software/.github.io/TROLIE/)
 
 ### License
 
-[Apache 2.0](https://github.com/misoenergy/TROLIE/blob/main/LICENSE)
+[Apache 2.0](https://github.com/ge-grid-software/TROLIE/blob/main/LICENSE)
