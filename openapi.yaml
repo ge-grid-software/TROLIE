@@ -48,7 +48,7 @@ info:
     are provided through links, which are navigable through GET requests.  On submittal (POST or PUT requests), this may be confusing when a particular
     relationship must be provided by the client.  Clients should populate these links on submital, but may assume that the paths are relative, and only the href
     needing to be populated.  As shown in the example in `createMonitoringSet`, `line2` may be added to the monitoring set by setting 
-    the href = /reference-data/network-elements/line2  
+    the href = /reference-data/transmission-facilities/line2  
 
   version: '1.0.0-alpha.1'
   contact:
@@ -64,7 +64,7 @@ servers:
 tags:
   - name: Monitoring Sets
     description: | 
-      Monitoring sets are arbitrarily defined sets of network components, both segments and elements, 
+      Monitoring sets are arbitrarily defined sets of network components, both segments and transmission facilities, 
       that may be used to filter ratings and limits returned by queries against this API.  These are stored sets that may be defined
       arbitrarily by users of the API, so long as those users have permission to view relevant components.  
 
@@ -101,9 +101,9 @@ tags:
   - name: Reference Data
     description: | 
       Reference to sets of data that are referenced by ratings, limits and monitoring sets.  This includes:
-      * List of segmenets and elements defined in TROLIE's network model.  
+      * List of segments and transmission facilities defined in TROLIE's network model.  
       * From an IEC CIM perspective, the list of GeographicalRegions and SubGeographicalRegions defined in the model, and their 
-        association to elements and segments.  
+        association to transmission facilities and segments.  
       * A list of supported seasons.  
       * A list of supported limit types.  
       * A list of supported naming schemes.  
@@ -122,7 +122,7 @@ paths:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'
         - $ref: '#/components/parameters/naming-scheme'
@@ -148,8 +148,8 @@ paths:
                   - _links:
                       provenant-submissions:
                       - href: /rating-submissions/forecasts/12345
-                      element:
-                        href: /reference-data/network-elements/line2
+                      transmission-facility:
+                        href: /reference-data/transmission-facilities/line2
                         name: line2
                     periods:
                     - period-start: "2023-07-12T16:00:00-07:00"
@@ -230,7 +230,7 @@ paths:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/naming-scheme'
@@ -280,7 +280,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/period-start'
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/naming-scheme'
@@ -314,7 +314,7 @@ paths:
         and the `ETag` of a previous `GET` response.
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/naming-scheme'
@@ -342,8 +342,8 @@ paths:
                   - _links:
                       provenant-submissions:
                       - href: /rating-submissions/realtime/67890
-                      element:
-                        href: /reference-data/network-elements/line2
+                      transmission-facility:
+                        href: /reference-data/transmission-facilities/line2
                         name: line2
                     updated-time: "2023-07-12T13:05:43.044267100-07:00"
                     values: 
@@ -390,7 +390,7 @@ paths:
         - Operating Snapshots
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/naming-scheme'
@@ -406,7 +406,7 @@ paths:
         - Recourse Rating Snapshots
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/naming-scheme'
@@ -431,8 +431,8 @@ paths:
                   - _links:
                       provenant-submissions:
                       - href: /rating-submissions/recourse/12345
-                      element:
-                        href: /reference-data/network-elements/line2
+                      transmission-facility:
+                        href: /reference-data/transmission-facilities/line2
                         name: line2
                     seasons:
                     - _links:
@@ -484,7 +484,7 @@ paths:
         - Recourse Rating Snapshots
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/element-filter'
+        - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/naming-scheme'
@@ -1748,12 +1748,12 @@ paths:
                   href: /monitoring-sets/utilityA-and-neighbors 
               id: utilityA-and-neighbors   
               description: Utility A's owned lines, as well as surround neighbors. 
-              elements:
+              transmission-facilities:
               - name: line1
-                href: /reference-data/network-elements/line1 
-              - href: /reference-data/network-elements/line2  
+                href: /reference-data/transmission-facilities/line1 
+              - href: /reference-data/transmission-facilities/line2  
               - name: line3             
-                href: /reference-data/network-elements/line3
+                href: /reference-data/transmission-facilities/line3
           application/json:
             schema:
               $ref: '#/components/schemas/monitoring-set'
@@ -1817,13 +1817,13 @@ paths:
                     href: /monitoring-sets/utilityA-and-neighbors 
                 id: utilityA-and-neighbors   
                 description: Utility A's owned lines, as well as surround neighbors. 
-                elements:
+                transmission-facilities:
                 - name: line1
-                  href: /reference-data/network-elements/line1 
+                  href: /reference-data/transmission-facilities/line1 
                 - name: line2
-                  href: /reference-data/network-elements/line2  
+                  href: /reference-data/transmission-facilities/line2  
                 - name: line3             
-                  href: /reference-data/network-elements/line3
+                  href: /reference-data/transmission-facilities/line3
             application/json:
               schema:
                 $ref: '#/components/schemas/monitoring-set'                                  
@@ -1887,12 +1887,12 @@ paths:
                   href: /monitoring-sets/utilityA-and-neighbors 
               id: utilityA-and-neighbors   
               description: Utility A's owned lines, as well as surround neighbors. 
-              elements:
+              transmission-facilities:
               - name: line1
-                href: /reference-data/network-elements/line1 
-              - href: /reference-data/network-elements/line2  
+                href: /reference-data/transmission-facilities/line1 
+              - href: /reference-data/transmission-facilities/line2  
               - name: line3             
-                href: /reference-data/network-elements/line3  
+                href: /reference-data/transmission-facilities/line3  
           application/json:
             schema:
               $ref: '#/components/schemas/monitoring-set'                                    
@@ -2261,10 +2261,10 @@ paths:
         default: *commonDefaultErr
       security: *refReadSecurity      
 
-  /reference-data/network-elements:
+  /reference-data/transmission-facilities:
     get:
-      operationId: getNetworkElements
-      description: Get network elements in the model with effective dates
+      operationId: getTransmissionFacilities
+      description: Get transmission facilities in the model with effective dates
       tags:
         - Reference Data    
       parameters:
@@ -2274,30 +2274,30 @@ paths:
         "200":
           description: OK
           content:
-            application/vnd.trolie.network-element-set.v1+json:
+            application/vnd.trolie.transmission-facility-set.v1+json:
               schema:
-                $ref: '#/components/schemas/network-element-set'
+                $ref: '#/components/schemas/transmission-facility-set'
               example:
                 _links:
                   self: 
-                    href: /reference-data/network-elements
+                    href: /reference-data/transmission-facilities
                 _embedded:
-                  elements:
+                  transmission-facilities:
                   - _links:
                       self:
-                        href: /reference-data/network-elements/Line4
+                        href: /reference-data/transmission-facilities/Line4
                     id: Line4
                     effective-time: "2023-09-01T00:00:00-07:00"
                     _embedded:
                       segments:
                       - _links:
                           self:
-                            href: /reference-data/network-segments/Line4North
+                            href: /reference-data/transmission-facilities/Line4North
                         id: Line4North
                         effective-time: "2023-09-01T00:00:00-07:00"   
             application/json:
               schema:
-                $ref: '#/components/schemas/network-element-set'                                       
+                $ref: '#/components/schemas/transmission-facility-set'                                       
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -2317,9 +2317,9 @@ paths:
         default: *commonDefaultErr
       security: *refReadSecurity
     head:
-      operationId: getNetworkElementsHeaders
+      operationId: getTransmissionFacilitiesHeaders
       description: >
-        Use to obtain the headers that would be returned for `getNetworkElements`.
+        Use to obtain the headers that would be returned for `getNetworkTransmissionFacilities`.
         Useful for cache invalidation.
       parameters:
         - $ref: '#/components/parameters/max-records'
@@ -2329,10 +2329,10 @@ paths:
       responses: *headResponses
       security: *refReadSecurity
 
-  /reference-data/network-elements/{id}:
+  /reference-data/transmission-facilities/{id}:
     get:
-      operationId: getNetworkElement
-      description: Gets a single element instance.  
+      operationId: getTransmissionFacility
+      description: Gets a single transmission facility instance.  
       tags:
         - Reference Data
       parameters:
@@ -2341,13 +2341,13 @@ paths:
         "200":
           description: OK
           content:
-            application/vnd.trolie.network-element.v1+json:
+            application/vnd.trolie.transmission-facility.v1+json:
               schema:
-                $ref: '#/components/schemas/network-element'
+                $ref: '#/components/schemas/transmission-facility'
               example:
                 _links:
                   self:
-                    href: /reference-data/network-elements/Line4
+                    href: /reference-data/transmission-facilities/Line4
                 id: Line4
                 effective-time: "2023-09-01T00:00:00-07:00"
                 _embedded:
@@ -2359,7 +2359,7 @@ paths:
                     effective-time: "2023-09-01T00:00:00-07:00"   
             application/json:
               schema:
-                $ref: '#/components/schemas/network-element'                                  
+                $ref: '#/components/schemas/transmission-facility'                                  
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -2666,10 +2666,10 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/generic-identifier'
-    element-filter:
-      name: element
+    facility-filter:
+      name: transmission-facility
       description: >
-        Only return limits for this element.  Respects `X-TROLIE-Naming-Scheme` header for looking up name.  
+        Only return limits for this transmission facility.  Respects `X-TROLIE-Naming-Scheme` header for looking up name.  
       in: query
       required: false
       schema:
@@ -2702,11 +2702,11 @@ components:
     naming-scheme:
       name: X-TROLIE-Naming-Scheme
       description: |
-        Indicates the naming scheme used by this operation.  The names of elements and segments
+        Indicates the naming scheme used by this operation.  The names of transmission facilities and segments
         will vary depending on their use.  CIM Master Resource Identifiers (mRIDs) may be used, as well
         as names used by the EMS or other systems.  The list of naming schemes supported, as well as the current default, 
-        is a function of the TROLIE implementation.  All names of all elements are available in the getNetworkSegments and 
-        getNetworkElements operations.  The list of all naming conventions and the configured default is available in the 
+        is a function of the TROLIE implementation.  All names of all facilities are available in the getNetworkSegments and 
+        getTransmissionFacilities operations.  The list of all naming conventions and the configured default is available in the 
         getNetworkNamingConventions operation.        
       in: header
       required: false
@@ -2720,7 +2720,7 @@ components:
         By default, all limits and ratings are assumed to be in megavolt-amperes (MVA).  However, TROLIE implementations _may_ support 
         alternative units, for both submittal and query, under the following circumstances:
 
-        * Current (amps) may be used if the given segment or element has a nominal voltage configured in the model.  
+        * Current (amps) may be used if the given segment or transmission facility has a nominal voltage configured in the model.  
           Conversion from/to MVA will be done assuming this nominal voltage.  Submittals in amps for segments without 
           a nominal voltage in amps will return null, and submittals in amps will not be allowed for such segments.  
         * A combination of actual power in megawatts (MW) and an assumed power factor (PF) in MW/MVA.  The MW and PF pairs must be offered together
@@ -2921,7 +2921,7 @@ components:
               type: array
               items: 
                 $ref: "#/components/schemas/hal-link"      
-            element: 
+            transmission-facility: 
               $ref: '#/components/schemas/hal-link'      
         updated-time:
           $ref: '#/components/schemas/timestamp'
@@ -2957,7 +2957,7 @@ components:
               type: array
               items: 
                 $ref: "#/components/schemas/hal-link"      
-            element: 
+            transmission-facility: 
               $ref: '#/components/schemas/hal-link'  
         periods:
           type: array
@@ -3002,7 +3002,7 @@ components:
               type: array
               items: 
                 $ref: "#/components/schemas/hal-link"      
-            element: 
+            transmission-facility: 
               $ref: '#/components/schemas/hal-link'      
         seasons:
           type: array 
@@ -3281,9 +3281,9 @@ components:
 
     monitoring-set:
       description: |
-        Set of elements noteworthy to reference in queries in TROLIE.  
+        Set of transmission facilities noteworthy to reference in queries in TROLIE.  
         The set of segments included in the monitoring set is implied by their
-        inclusion in the elements within the monitoring set.  
+        inclusion in the transmission facilities within the monitoring set.  
       type: object
       additionalProperties: false
       properties:
@@ -3293,7 +3293,7 @@ components:
           $ref: '#/components/schemas/generic-identifier'   
         description:
           type: string    
-        elements: 
+        transmission-facilities: 
           type: array
           minItems: 0
           maxItems: 50000
@@ -3383,7 +3383,7 @@ components:
           $ref: '#/components/schemas/generic-identifier'
           
 
-    network-element-set:
+    transmission-facility-set:
       allOf:
       - $ref: '#/components/schemas/paged-resource'
       - type: object
@@ -3396,13 +3396,13 @@ components:
                 minItems: 0
                 maxItems: 50000 
                 items:
-                  $ref: '#/components/schemas/network-element'
+                  $ref: '#/components/schemas/transmission-facility'
 
-    network-element:
+    transmission-facility:
       type: object
       description: |
-        A network element is any component of the network that can have a dynamic limit- 
-        this is generally lines, but could also include equipment such as transformers.  Elements generally are composed of segments.  
+        A transmission facility is any component of the network that can have a dynamic limit- 
+        this is generally lines, but could also include equipment such as transformers.  Transmission facilities generally are composed of segments.  
       additionalProperties: false
       properties:
         _links:
@@ -3452,9 +3452,9 @@ components:
     network-segment:
       type: object
       description: |
-        A network segment is a component of an element that may have rating assigned to it.  
+        A network segment is a component of an transmission facility that may have a rating assigned to it.  
         These are generally line segments, but can really be any piece of equipment on the network that 
-        can have a dynamic rating and is potentially limiting to some element.  
+        can have a dynamic rating and is potentially limiting to some transmission facility.  
       additionalProperties: false
       properties:
         _links:
@@ -3462,7 +3462,7 @@ components:
           - $ref: '#/components/schemas/hal-links-block'
           - type: object
             properties:
-              element: 
+              transmission-facility: 
                 $ref: '#/components/schemas/hal-link'
         id:
           $ref: '#/components/schemas/generic-identifier'
@@ -3864,11 +3864,11 @@ components:
           - $ref: '#/components/schemas/origin-id'
     X-TROLIE-Naming-Scheme:
       description: |
-        Indicates the naming scheme used by this operation.  The names of elements and segments
+        Indicates the naming scheme used by this operation.  The names of transmission facilities and segments
         will vary depending on their use.  CIM Master Resource Identifiers (mRIDs) may be used, as well
         as names used by the EMS or other systems.  The list of naming schemes supported, as well as the current default, 
-        is a function of the TROLIE implementation.  All names of all elements are available in the getNetworkSegments and 
-        getNetworkElements operations.  The list of all naming conventions and the configured default is available in the 
+        is a function of the TROLIE implementation.  All names of all transmission facilities are available in the getNetworkSegments and 
+        getTransmissionFacilities operations.  The list of all naming conventions and the configured default is available in the 
         getNetworkNamingConventions operation.              
       schema:
         type: string    
@@ -3877,7 +3877,7 @@ components:
         By default, all limits and ratings are assumed to be in megavolt-amperes (MVA).  However, TROLIE implementations _may_ support 
         alternative units, for both submittal and query, under the following circumstances:
 
-        * Current (amps) may be used if the given segment or element has a nominal voltage configured in the model.  
+        * Current (amps) may be used if the given segment or transmission facility has a nominal voltage configured in the model.  
           Conversion from/to MVA will be done assuming this nominal voltage.  Submittals in amps for segments without 
           a nominal voltage in amps will return null, and submittals in amps will not be allowed for such segments.  
         * A combination of actual power in megawatts (MW) and an assumed power factor (PF) in MW/MVA.  The MW and PF pairs must be offered together
