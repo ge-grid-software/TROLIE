@@ -50,7 +50,7 @@ info:
     needing to be populated.  As shown in the example in `createMonitoringSet`, `line2` may be added to the monitoring set by setting 
     the href = /reference-data/transmission-facilities/line2  
 
-  version: '1.0.0-alpha.1'
+  version: '0.1.0-wip'
   contact:
     # Temporary for this version.  
     name: Tory McKeag
@@ -75,12 +75,12 @@ tags:
         Facility ratings that is in-use by the Transmission Provider at the time
         of the request for this resource.  These are actively used for look-ahead operational decisions, such as the
         day-ahead market, in addition to their role as recourse limits if real-time ratings
-        submissions are missing.  
+        proposals are missing.  
       * **Operating Limits Real-Time Snapshot** is the set of System Operating Limits the
         Transmission Provider is operating to at the time of the request for
         this resource.  
 
-  - name: Rating Submissions
+  - name: Rating Proposals
     description: |
       Ratings Providers may submit ratings for three separate time horizons:
       * **Forecast Ratings** are at minimum hourly forecasts of ratings for a particular segment.  
@@ -146,8 +146,8 @@ paths:
                 _embedded:
                   forecasts:
                   - _links:
-                      provenant-submissions:
-                      - href: /rating-submissions/forecasts/12345
+                      provenant-proposals:
+                      - href: /rating-proposals/forecasts/12345
                       transmission-facility:
                         href: /reference-data/transmission-facilities/line2
                         name: line2
@@ -340,8 +340,8 @@ paths:
                 _embedded:
                   limits:
                   - _links:
-                      provenant-submissions:
-                      - href: /rating-submissions/realtime/67890
+                      provenant-proposals:
+                      - href: /rating-proposals/realtime/67890
                       transmission-facility:
                         href: /reference-data/transmission-facilities/line2
                         name: line2
@@ -429,8 +429,8 @@ paths:
                 _embedded:
                   recourse-ratings:
                   - _links:
-                      provenant-submissions:
-                      - href: /rating-submissions/recourse/12345
+                      provenant-proposals:
+                      - href: /rating-proposals/recourse/12345
                       transmission-facility:
                         href: /reference-data/transmission-facilities/line2
                         name: line2
@@ -598,18 +598,18 @@ paths:
       security: *snapshotReadSecurity
 
 
-  /rating-submissions/forecasts:
+  /rating-proposals/forecasts:
     get:
-      operationId: getRatingForecastSubmissions
+      operationId: getRatingForecastProposals
       description: >
         Obtain the Ratings Forecasts the Ratings Provider has submitted.  
         Note that the offset-period-start and period-end parameters work in a similar fashion to 
-        getLimitsForecastSnapshot, except that it will return any submission that overlaps with the implied period.  
+        getLimitsForecastSnapshot, except that it will return any proposal that overlaps with the implied period.  
 
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
@@ -625,20 +625,20 @@ paths:
         "200":
           description: OK
           content:
-            application/vnd.trolie.rating-forecast-submission-set.v1+json:
+            application/vnd.trolie.rating-forecast-proposal-set.v1+json:
               schema:
                 $ref: '#/components/schemas/forecast-rating-set'
               example:
                 _links:
                   self: 
-                    href: /rating-submissions/forecasts
+                    href: /rating-proposals/forecasts
                 total-count: 1
                 offset: 0
                 _embedded:
-                  submissions:
+                  proposals:
                   - _links:
                       self:
-                        href: /rating-submissions/forecasts/12345
+                        href: /rating-proposals/forecasts/12345
                     id: "12345"
                     timestamp: "2023-07-12T15:05:43.044267100-07:00"
                     submitter: utilityA
@@ -689,16 +689,16 @@ paths:
         "410": *common410        
         "429": *common429
         default: *commonDefaultErr
-      security: &forecastsubmissionReadSecurity
+      security: &forecastproposalReadSecurity
         - oauth2-primary-flow:
-          - "read:forecast-submissions"       
+          - "read:forecast-proposals"       
     head:
-      operationId: getRatingForecastSubmissionsHeaders
+      operationId: getRatingForecastProposalsHeaders
       description: >
         Use to obtain the headers that would be returned for 
-        `getRatingForecastSubmissions`. Useful for cache invalidation.
+        `getRatingForecastProposals`. Useful for cache invalidation.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
@@ -712,22 +712,22 @@ paths:
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
-      security: *forecastsubmissionReadSecurity
+      security: *forecastproposalReadSecurity
 
     post:
-      operationId: postRatingForecastSubmission
+      operationId: postRatingForecastProposal
       description: >
-        Post a new Rating Forecast Submission 
+        Post a new Rating Forecast Proposal 
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/limit-units'    
       requestBody:
         content:
-          application/vnd.trolie.rating-forecast-submission.v1+json:
+          application/vnd.trolie.rating-forecast-proposal.v1+json:
             schema:
-              $ref: '#/components/schemas/forecast-rating-submission'   
+              $ref: '#/components/schemas/forecast-rating-proposal'   
             example:
               ratings: 
               - _links:
@@ -753,7 +753,7 @@ paths:
                       mva: 170       
           application/json:
             schema:
-              $ref: '#/components/schemas/forecast-rating-submission'                                                             
+              $ref: '#/components/schemas/forecast-rating-proposal'                                                             
       responses: 
         "202": 
           description: >
@@ -761,13 +761,13 @@ paths:
             ratings may need to undergo additional validation and propagation
             to other systems.
           content:
-            application/vnd.trolie.rating-forecast-submission.v1+json:
+            application/vnd.trolie.rating-forecast-proposal.v1+json:
               schema:
-                $ref: '#/components/schemas/forecast-rating-submission'
+                $ref: '#/components/schemas/forecast-rating-proposal'
               example:
                 _links:
                   self:
-                    href: /rating-submissions/forecasts/12345
+                    href: /rating-proposals/forecasts/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
@@ -795,7 +795,7 @@ paths:
                         mva: 170 
             application/json:
               schema:
-                $ref: '#/components/schemas/forecast-rating-submission'                                           
+                $ref: '#/components/schemas/forecast-rating-proposal'                                           
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -812,7 +812,7 @@ paths:
         "304": *common304
         "400": &submit400
           description: >
-            Malformed request, submission is invalid.  Details are in error messages.  
+            Malformed request, proposal is invalid.  Details are in error messages.  
           content:
             application/json:
               schema:
@@ -837,30 +837,30 @@ paths:
         default: *commonDefaultErr   
       security: 
         - oauth2-primary-flow:
-          - "write:forecast-submissions"  
+          - "write:forecast-proposals"  
 
-  /rating-submissions/forecasts/{submission-id}:
+  /rating-proposals/forecasts/{proposal-id}:
     get:
-      operationId: getRatingForecastSubmission
+      operationId: getRatingForecastProposal
       description: >
-        Obtain a specific rating submission by Id.  
+        Obtain a specific rating proposal by Id.  
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
-        - $ref: '#/components/parameters/submission-id'   
+        - $ref: '#/components/parameters/proposal-id'   
         - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/limit-units'                      
       responses: 
         "200":
           description: OK
           content:
-            application/vnd.trolie.rating-forecast-submission.v1+json:
+            application/vnd.trolie.rating-forecast-proposal.v1+json:
               schema:
-                $ref: '#/components/schemas/forecast-rating-submission'
+                $ref: '#/components/schemas/forecast-rating-proposal'
               example:
                 _links:
                   self:
-                    href: /rating-submissions/forecasts/12345
+                    href: /rating-proposals/forecasts/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
@@ -888,7 +888,7 @@ paths:
                         mva: 170      
             application/json:
               schema:
-                $ref: '#/components/schemas/forecast-rating-submission'                                   
+                $ref: '#/components/schemas/forecast-rating-proposal'                                   
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -910,9 +910,9 @@ paths:
         "406": *common406
         "429": *common429
         default: *commonDefaultErr   
-      security: *forecastsubmissionReadSecurity
+      security: *forecastproposalReadSecurity
 
-  /rating-submissions/missing/forecasts:
+  /rating-proposals/missing/forecasts:
     get:
       operationId: getMissingRatingForecastPeriods
       description: >
@@ -923,7 +923,7 @@ paths:
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
@@ -940,7 +940,7 @@ paths:
               example:
                 _links:
                   self: 
-                    href: /rating-submissions/missing/forecasts
+                    href: /rating-proposals/missing/forecasts
                 total-count: 1
                 offset: 0
                 _embedded:
@@ -974,7 +974,7 @@ paths:
         "410": *common410        
         "429": *common429
         default: *commonDefaultErr
-      security: *forecastsubmissionReadSecurity
+      security: *forecastproposalReadSecurity
    
     head:
       operationId: getMissingRatingForecastPeriodsHeaders
@@ -982,7 +982,7 @@ paths:
         Use to obtain the headers that would be returned for 
         `getMissingRatingForecastPeriods`. Useful for cache invalidation.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
@@ -991,9 +991,9 @@ paths:
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
-      security: *forecastsubmissionReadSecurity
+      security: *forecastproposalReadSecurity
 
-  /rating-submissions/missing/forecasts/{ratings-provider}:
+  /rating-proposals/missing/forecasts/{ratings-provider}:
     get:
       operationId: getMissingRatingForecastPeriodsForProvider
       description: >
@@ -1004,7 +1004,7 @@ paths:
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/ratings-provider'
         - $ref: '#/components/parameters/offset-period-start'
@@ -1022,7 +1022,7 @@ paths:
               example:
                 _links:
                   self: 
-                    href: /rating-submissions/missing/forecasts/providerA
+                    href: /rating-proposals/missing/forecasts/providerA
                 total-count: 1
                 offset: 0
                 _embedded:
@@ -1057,7 +1057,7 @@ paths:
         "410": *common410        
         "429": *common429
         default: *commonDefaultErr
-      security: *forecastsubmissionReadSecurity
+      security: *forecastproposalReadSecurity
    
     head:
       operationId: getMissingRatingForecastPeriodsForProviderHeaders
@@ -1065,7 +1065,7 @@ paths:
         Use to obtain the headers that would be returned for 
         `getMissingRatingForecastPeriodsForProvider`. Useful for cache invalidation.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/ratings-provider'      
         - $ref: '#/components/parameters/offset-period-start'
@@ -1075,18 +1075,18 @@ paths:
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
-      security: *forecastsubmissionReadSecurity      
+      security: *forecastproposalReadSecurity      
 
-  /rating-submissions/realtime:
+  /rating-proposals/realtime:
     get:
-      operationId: getRealTimeRatingSubmissions
+      operationId: getRealTimeRatingProposals
       description: >
         Obtain the latest Real-Time Ratings the Ratings Provider has submitted.  
 
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
@@ -1100,20 +1100,20 @@ paths:
         "200":
           description: OK
           content:
-            application/vnd.trolie.realtime-rating-submission-set.v1+json:
+            application/vnd.trolie.realtime-rating-proposal-set.v1+json:
               schema:
                 $ref: '#/components/schemas/realtime-rating-set'      
               example:
                 _links:
                   self: 
-                    href: /rating-submissions/realtime
+                    href: /rating-proposals/realtime
                 total-count: 1
                 offset: 0
                 _embedded:
-                  submissions:
+                  proposals:
                   - _links:
                       self:
-                        href: /rating-submissions/realtime/12345
+                        href: /rating-proposals/realtime/12345
                     id: "12345"
                     timestamp: "2023-07-12T15:05:43.044267100-07:00"
                     submitter: utilityA
@@ -1163,16 +1163,16 @@ paths:
         "406": *common406
         "429": *common429
         default: *commonDefaultErr
-      security: &realtimesubmissionReadSecurity
+      security: &realtimeproposalReadSecurity
         - oauth2-primary-flow:
-          - "read:realtime-submissions"       
+          - "read:realtime-proposals"       
     head:
-      operationId: getRealTimeRatingSubmissionsHeaders
+      operationId: getRealTimeRatingProposalsHeaders
       description: >
         Use to obtain the headers that would be returned for 
-        `getRealTimeSubmissions`. Useful for cache invalidation.
+        `getRealTimeProposals`. Useful for cache invalidation.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
@@ -1184,22 +1184,22 @@ paths:
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
-      security: *realtimesubmissionReadSecurity
+      security: *realtimeproposalReadSecurity
 
     post:
-      operationId: postRealTimeSubmission
+      operationId: postRealTimeProposal
       description: >
-        Post a new RealTime Rating Submission 
+        Post a new RealTime Rating Proposal 
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/limit-units'    
       requestBody:
         content:
-          application/vnd.trolie.realtime-rating-submission.v1+json:
+          application/vnd.trolie.realtime-rating-proposal.v1+json:
             schema:
-              $ref: '#/components/schemas/realtime-rating-submission' 
+              $ref: '#/components/schemas/realtime-rating-proposal' 
             example:
               ratings: 
               - _links:
@@ -1219,7 +1219,7 @@ paths:
                     mva: 170               
           application/json:
             schema:
-              $ref: '#/components/schemas/realtime-rating-submission'
+              $ref: '#/components/schemas/realtime-rating-proposal'
                            
       responses: 
         "202": 
@@ -1228,13 +1228,13 @@ paths:
             ratings may need to undergo additional validation and propagation
             to other systems.
           content:
-            application/vnd.trolie.realtime-submission.v1+json:
+            application/vnd.trolie.realtime-proposal.v1+json:
               schema:
-                $ref: '#/components/schemas/realtime-rating-submission'
+                $ref: '#/components/schemas/realtime-rating-proposal'
               example:
                 _links:
                   self:
-                    href: /rating-submissions/realtime/12345
+                    href: /rating-proposals/realtime/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
@@ -1262,7 +1262,7 @@ paths:
                       mva: 170        
             application/json:
               schema:
-                $ref: '#/components/schemas/realtime-rating-submission'                                
+                $ref: '#/components/schemas/realtime-rating-proposal'                                
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -1287,30 +1287,30 @@ paths:
         default: *commonDefaultErr   
       security: 
         - oauth2-primary-flow:
-          - "write:realtime-submissions"  
+          - "write:realtime-proposals"  
 
-  /rating-submissions/realtime/{submission-id}:
+  /rating-proposals/realtime/{proposal-id}:
     get:
-      operationId: getRealTimeSubmission
+      operationId: getRealTimeProposal
       description: >
-        Obtain a specific rating submission by Id.  
+        Obtain a specific rating proposal by Id.  
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
-        - $ref: '#/components/parameters/submission-id'   
+        - $ref: '#/components/parameters/proposal-id'   
         - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/limit-units'                      
       responses: 
         "200":
           description: OK
           content:
-            application/vnd.trolie.realtime-rating-submission.v1+json:
+            application/vnd.trolie.realtime-rating-proposal.v1+json:
               schema:
-                $ref: '#/components/schemas/realtime-rating-submission'
+                $ref: '#/components/schemas/realtime-rating-proposal'
               example:
                 _links:
                   self:
-                    href: /rating-submissions/realtime/12345
+                    href: /rating-proposals/realtime/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
@@ -1338,7 +1338,7 @@ paths:
                       mva: 170              
             application/json:
               schema:
-                $ref: '#/components/schemas/realtime-rating-submission'
+                $ref: '#/components/schemas/realtime-rating-proposal'
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -1360,18 +1360,18 @@ paths:
         "406": *common406
         "429": *common429
         default: *commonDefaultErr   
-      security: *realtimesubmissionReadSecurity
+      security: *realtimeproposalReadSecurity
 
-  /rating-submissions/recourse:
+  /rating-proposals/recourse:
     get:
-      operationId: getRecourseRatingSubmissions
+      operationId: getRecourseRatingProposals
       description: >
         Obtain the latest Recourse / Seasonal Ratings the Ratings Provider has submitted.  
 
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
@@ -1385,20 +1385,20 @@ paths:
         "200":
           description: OK
           content:
-            application/vnd.trolie.recourse-rating-submission-set.v1+json:
+            application/vnd.trolie.recourse-rating-proposal-set.v1+json:
               schema:
                 $ref: '#/components/schemas/recourse-rating-set'
               example:
                 _links:
                   self: 
-                    href: /rating-submissions/recourse
+                    href: /rating-proposals/recourse
                 total-count: 1
                 offset: 0
                 _embedded:
-                  submissions:
+                  proposals:
                   - _links:
                       self:
-                        href: /rating-submissions/recourse/12345
+                        href: /rating-proposals/recourse/12345
                     id: "12345"
                     timestamp: "2023-07-12T15:05:43.044267100-07:00"
                     submitter: utilityA
@@ -1449,16 +1449,16 @@ paths:
         "406": *common406
         "429": *common429
         default: *commonDefaultErr
-      security: &recoursesubmissionReadSecurity
+      security: &recourseproposalReadSecurity
         - oauth2-primary-flow:
-          - "read:recourse-submissions"       
+          - "read:recourse-proposals"       
     head:
-      operationId: getRecourseRatingSubmissionsHeaders
+      operationId: getRecourseRatingProposalsHeaders
       description: >
         Use to obtain the headers that would be returned for 
-        `getRecourseSubmissions`. Useful for cache invalidation.
+        `getRecourseProposals`. Useful for cache invalidation.
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
@@ -1470,22 +1470,22 @@ paths:
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
-      security: *recoursesubmissionReadSecurity
+      security: *recourseproposalReadSecurity
 
     post:
-      operationId: postRecourseSubmission
+      operationId: postRecourseProposal
       description: >
-        Post a new Recourse Rating Submission 
+        Post a new Recourse Rating Proposal 
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/limit-units'    
       requestBody:
         content:
-          application/vnd.trolie.recourse-rating-submission.v1+json:
+          application/vnd.trolie.recourse-rating-proposal.v1+json:
             schema:
-              $ref: '#/components/schemas/recourse-rating-submission'   
+              $ref: '#/components/schemas/recourse-rating-proposal'   
             example:
               ratings: 
               - _links:
@@ -1512,7 +1512,7 @@ paths:
                       mva: 170 
           application/json:
             schema:
-              $ref: '#/components/schemas/recourse-rating-submission'                                          
+              $ref: '#/components/schemas/recourse-rating-proposal'                                          
       responses: 
         "202": 
           description: >
@@ -1520,13 +1520,13 @@ paths:
             ratings may need to undergo additional validation and propagation
             to other systems.
           content:
-            application/vnd.trolie.recourse-submission.v1+json:
+            application/vnd.trolie.recourse-proposal.v1+json:
               schema:
-                $ref: '#/components/schemas/recourse-rating-submission'
+                $ref: '#/components/schemas/recourse-rating-proposal'
               example:
                 _links:
                   self:
-                    href: /rating-submissions/recourse/12345
+                    href: /rating-proposals/recourse/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
@@ -1555,7 +1555,7 @@ paths:
                         mva: 170  
             application/json:
               schema:
-                $ref: '#/components/schemas/recourse-rating-submission'                                       
+                $ref: '#/components/schemas/recourse-rating-proposal'                                       
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -1580,30 +1580,30 @@ paths:
         default: *commonDefaultErr   
       security: 
         - oauth2-primary-flow:
-          - "write:recourse-submissions"  
+          - "write:recourse-proposals"  
 
-  /rating-submissions/recourse/{submission-id}:
+  /rating-proposals/recourse/{proposal-id}:
     get:
-      operationId: getRecourseSubmission
+      operationId: getRecourseProposal
       description: >
-        Obtain a specific rating submission by Id.  
+        Obtain a specific rating proposal by Id.  
       tags:
-        - Rating Submissions
+        - Rating Proposals
       parameters:
-        - $ref: '#/components/parameters/submission-id'   
+        - $ref: '#/components/parameters/proposal-id'   
         - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/limit-units'                      
       responses: 
         "200":
           description: OK
           content:
-            application/vnd.trolie.recourse-rating-submission.v1+json:
+            application/vnd.trolie.recourse-rating-proposal.v1+json:
               schema:
-                $ref: '#/components/schemas/recourse-rating-submission'
+                $ref: '#/components/schemas/recourse-rating-proposal'
               example:
                 _links:
                   self:
-                    href: /rating-submissions/recourse/12345
+                    href: /rating-proposals/recourse/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
@@ -1632,7 +1632,7 @@ paths:
                         mva: 170                     
             application/json:
               schema:
-                $ref: '#/components/schemas/recourse-rating-submission'
+                $ref: '#/components/schemas/recourse-rating-proposal'
           headers:
             X-Rate-Limit-Limit:
               $ref: '#/components/headers/X-Rate-Limit-Limit'
@@ -1654,7 +1654,7 @@ paths:
         "406": *common406
         "429": *common429
         default: *commonDefaultErr   
-      security: *recoursesubmissionReadSecurity
+      security: *recourseproposalReadSecurity
 
   /monitoring-sets:
     get:
@@ -2612,10 +2612,10 @@ components:
         $ref: '#/components/schemas/period-start'  
 
 
-    submission-id:
-      name: submission-id
+    proposal-id:
+      name: proposal-id
       description: >
-        ID of the associated submission
+        ID of the associated proposal
       in: path
       required: true
       schema:
@@ -2893,7 +2893,7 @@ components:
           maximum: 1        
 
     limiting-segment-input:
-      description: Reason for a submission indicating that a limiting segment                                  
+      description: Reason for a proposal indicating that a limiting segment                                  
 
 
     realtime-limit-set:
@@ -2917,7 +2917,7 @@ components:
         _links: 
           type: object
           properties:
-            provenant-submissions:
+            provenant-proposals:
               type: array
               items: 
                 $ref: "#/components/schemas/hal-link"      
@@ -2953,7 +2953,7 @@ components:
         _links: 
           type: object
           properties:
-            provenant-submissions:
+            provenant-proposals:
               type: array
               items: 
                 $ref: "#/components/schemas/hal-link"      
@@ -2998,7 +2998,7 @@ components:
         _links: 
           type: object
           properties:
-            provenant-submissions:
+            provenant-proposals:
               type: array
               items: 
                 $ref: "#/components/schemas/hal-link"      
@@ -3078,18 +3078,18 @@ components:
                 minItems: 0
                 maxItems: 50000 
                 items:
-                  $ref: '#/components/schemas/forecast-rating-submission'
+                  $ref: '#/components/schemas/forecast-rating-proposal'
 
-    rating-submission:
+    rating-proposal:
       type: object
       description: |
-        General type for ratings submission, that are generated by the system after posting.  
+        General type for ratings proposal, that are generated by the system after posting.  
         Filling in these fields before posting may be ignored, or result in a 400 error from TROLIE.  
         Properties include:
         * A unique, system generated identifier.  
-        * The time the submission was recieved.  
-        * The ratings provider that created the submission.  
-        * If applicable, a link to another submission that supercedes this submission, for example on jointly-owned equipment.  
+        * The time the proposal was recieved.  
+        * The ratings provider that created the proposal.  
+        * If applicable, a link to another proposal that supercedes this proposal, for example on jointly-owned equipment.  
       properties:
         _links: 
           allOf:
@@ -3105,9 +3105,9 @@ components:
         submitter:
           $ref: '#/components/schemas/generic-identifier'
 
-    forecast-rating-submission:
+    forecast-rating-proposal:
       allOf:
-      - $ref: '#/components/schemas/rating-submission'
+      - $ref: '#/components/schemas/rating-proposal'
       - type: object 
         properties:              
           ratings:  
@@ -3178,16 +3178,16 @@ components:
           _embedded:
             type: object
             properties:
-              submissions:
+              proposals:
                 type: array
                 minItems: 0
                 maxItems: 50000 
                 items:
-                  $ref: '#/components/schemas/realtime-rating-submission'
+                  $ref: '#/components/schemas/realtime-rating-proposal'
 
-    realtime-rating-submission:
+    realtime-rating-proposal:
       allOf:
-      - $ref: '#/components/schemas/rating-submission'
+      - $ref: '#/components/schemas/rating-proposal'
       - type: object 
         properties:         
           ratings:
@@ -3218,17 +3218,17 @@ components:
           _embedded:
             type: object
             properties:
-              submissions:
+              proposals:
                 type: array
                 minItems: 0
                 maxItems: 50000 
                 items:
-                  $ref: '#/components/schemas/recourse-rating-submission'
+                  $ref: '#/components/schemas/recourse-rating-proposal'
               
 
-    recourse-rating-submission:
+    recourse-rating-proposal:
       allOf:
-      - $ref: '#/components/schemas/rating-submission'
+      - $ref: '#/components/schemas/rating-proposal'
       - type: object 
         properties:            
           ratings:  
@@ -3898,12 +3898,12 @@ components:
           #authorizationUrl: https://example.com/oauth2
           tokenUrl: https://no-server/oauth2
           scopes:
-            "read:forecast-submissions": "Read Forecast rating submissions"
-            "read:realtime-submissions": "Read real-time rating submissions"
-            "read:recourse-submissions": "Read recourse / seasonal rating submissions"
-            "write:forecast-submissions": "Submit forecasted ratings"
-            "write:realtime-submissions": "Submit realtime ratings"
-            "write:recourse-submissions": "Submit recourse / seasonal ratings"
+            "read:forecast-proposals": "Read Forecast rating proposals"
+            "read:realtime-proposals": "Read real-time rating proposals"
+            "read:recourse-proposals": "Read recourse / seasonal rating proposals"
+            "write:forecast-proposals": "Submit forecasted ratings"
+            "write:realtime-proposals": "Submit realtime ratings"
+            "write:recourse-proposals": "Submit recourse / seasonal ratings"
             "read:monitoring-set": "Read monitoring set definitions"
             "write:monitoring-sets": "Write monitoring set definitions"
             "read:operating-snapshot": "Read the ratings and limits snapshots in-use by the transmission provider"
