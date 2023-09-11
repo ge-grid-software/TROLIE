@@ -45,10 +45,11 @@ info:
     <b>HAL / HATEOAS Link Conventions</b>
 
     This API makes significant use of the REST HATEOAS pattern, using HAL conventions.  This means that relationships between resources
-    are provided through links, which are navigable through GET requests.  On submittal (POST or PUT requests), this may be confusing when a particular
-    relationship must be provided by the client.  Clients should populate these links on submital, but may assume that the paths are relative, and only the href
-    needing to be populated.  As shown in the example in `createMonitoringSet`, `line2` may be added to the monitoring set by setting 
-    the href = /reference-data/transmission-facilities/line2  
+    are provided through links that are navigable through GET requests.  On submittal (POST, PUT or PATCH requests), this may be confusing when a particular
+    relationship must be provided by the client.  The request bodies shall also include identifiers of the related elements.  Users shouldn't populate links- rather, these
+    are populated by the system, and are fetchable on GET.  As shown in the example in `patchRatingForecastProposal`, `segmentX` may be referenced by setting 
+    segment-id = segmentX.  When a Get for the same data, using `getRatingForecastsProposals`
+    the href = /reference-data/network-segments/segmentX   
 
   version: '0.1.0-wip'
   contact: 
