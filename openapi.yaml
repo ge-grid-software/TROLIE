@@ -743,7 +743,7 @@ paths:
           description: >
             The update was accepted for later processing. Updates to 
             ratings may need to undergo additional validation and propagation
-            to other systems.  Status may be retreived by 
+            to other systems.  Status may be retreived by issuing a GET using `getRatingForecastProposals`
           content:
             application/vnd.trolie.rating-forecast-proposal.v1+json:
               schema:
