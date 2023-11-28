@@ -94,7 +94,7 @@ tags:
 
   - name: Seasonal Rating Snapshots
     description: |
-      While not typically used directly in operational decisions, seasoan ratings are provided for two purposes:
+      While not typically used directly in operational decisions, seasonal ratings are provided for two purposes:
       1.  They are used when applicable forecast ratings are not available.  
       2.  They may be used in future-looking studies that look out (potentially far) beyond the time 
           window where forecast ratings are available.  
