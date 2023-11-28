@@ -2682,6 +2682,21 @@ components:
             - $ref: '#/components/schemas/apparent-power-value'
             - $ref: '#/components/schemas/current-value'
             - $ref: '#/components/schemas/actual-power-and-factor-value'
+
+    conditional-value-set:
+      type: array
+      description: |
+        List of alternative ratings for rating altering conditions on the segment.  References condition identifiers described in
+        `getNetworkSegment`
+      minItems: 1
+      maxItems: 100
+      items:
+        type: object
+        properties:
+          condition:
+            $ref: '#/components/schemas/network-component-name'               
+          values:
+            $ref: '#/components/schemas/limit-value-set'                  
     
     apparent-power-value:
       type: object
@@ -2852,19 +2867,7 @@ components:
         values:
           $ref: '#/components/schemas/limit-value-set'
         conditional-values:
-          type: array
-          description: |
-            List of alternative ratings for rating altering conditions on the segment.  References condition identifiers described in
-            `getNetworkSegment`
-          minItems: 1
-          maxItems: 100
-          items:
-            type: object
-            properties:
-              condition:
-                $ref: '#/components/schemas/generic-identifier'               
-              values:
-                $ref: '#/components/schemas/limit-value-set'            
+          $ref: '#/components/schemas/conditional-value-set'         
 
     season-instance-set: 
       type: object
@@ -3148,19 +3151,7 @@ components:
         values:
           $ref: '#/components/schemas/limit-value-set'  
         conditional-values:
-          type: array
-          description: |
-            List of alternative ratings for rating altering conditions on the segment.  References condition identifiers described in
-            `getNetworkSegment`
-          minItems: 1
-          maxItems: 100
-          items:
-            type: object
-            properties:
-              condition:
-                $ref: '#/components/schemas/generic-identifier'               
-              values:
-                $ref: '#/components/schemas/limit-value-set'  
+          $ref: '#/components/schemas/conditional-value-set'  
 
     monitoring-set-list:
       description: |
