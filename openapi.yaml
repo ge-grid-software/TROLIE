@@ -224,13 +224,22 @@ paths:
                 _embedded:
                   forecasts:
                   - _links:
-                      provenant-proposals:
-                      - href: /rating-proposals/forecasts/12345
                       transmission-facility:
                         href: /reference-data/transmission-facilities/line2
                         name: line2
                     periods:
-                    - period-start: "2023-07-12T16:00:00-07:00"
+                    - _links:
+                        provenant-proposals:
+                        - href: /rating-proposals/forecasts/12345
+                        temporary-ratings:
+                        - href: /temporary-ratings/2d8c80e8-f533-4be9-85bf-f7f81eb73d67    
+                        limiting-segment:
+                          href: /reference-data/network-segments/segmentX
+                          name: segmentX    
+                      override-reason: Any reason entered by the operator for an override.
+                      additional-data:
+                        vendor-specific-data: {}                   
+                      period-start: "2023-07-12T16:00:00-07:00"
                       updated-time: "2023-07-12T13:05:43.044267100-07:00"
                       values: 
                       - type: normal
@@ -442,13 +451,21 @@ paths:
                 total-count: 1
                 offset: 0
                 _embedded:
-                  limits:
+                  limits:                   
                   - _links:
-                      provenant-proposals:
-                      - href: /rating-proposals/realtime/67890
                       transmission-facility:
                         href: /reference-data/transmission-facilities/line2
                         name: line2
+                      provenant-proposals:
+                      - href: /rating-proposals/forecasts/12345
+                      temporary-ratings:
+                      - href: /temporary-ratings/2d8c80e8-f533-4be9-85bf-f7f81eb73d67    
+                      limiting-segment:
+                        href: /reference-data/network-segments/segmentX
+                        name: segmentX     
+                    override-reason: Any reason entered by the operator for an override.
+                    additional-data:
+                      vendor-specific-data: {}                                             
                     updated-time: "2023-07-12T13:05:43.044267100-07:00"
                     values: 
                     - type: normal
@@ -3359,7 +3376,6 @@ components:
     
     forecast-limit-period:
       type: object
-      additionalProperties: false
       properties: 
         period-start:
           $ref: '#/components/schemas/period-start'
