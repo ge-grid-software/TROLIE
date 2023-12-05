@@ -109,6 +109,48 @@ tags:
       * A list of supported seasons.  
       * A list of supported limit types.  
       * A list of supported naming schemes.  
+
+  - name: Temporary Ratings
+    description: |
+      A TemporaryRating is an exception to the AAR process, due to some unusual
+      condition on the facility.  This could be caused by a number of scenarios:
+      * An equipment failure.
+      * An unforseen condition on a related part of the power grid.
+      * Some ambient condition that is not part of the model is heating the line.
+      * Something in the surrounding environment is effecting the amount that a
+        line is allowed to sag.  For example, this may occur for lines over rivers when
+        very large ships pass under them. 
+    
+      The purpose and behavior of a temporary rating is two-fold.
+   
+      First, according to NERC, all exceptions to normal rating
+      must be documented and kept with history.  The actual numbers for the
+      forecasted and real-time feeds may still continue through proposals submitted to 
+      TROLIE. However, the presence of a temporary
+      rating, and the reason that it occurred, must be captured in history regardless
+      of the actual numbers.  The TemporaryRating may be held simply for that record-
+      keeping purpose.
+     
+      For the purpose of record-keeping, it may need to be updated after an
+      incident has occurred with actual values.  The reason and the end date of the
+      effective window may be updated after the object has been created, up to a
+      configurable threshold.
+     
+      If the targeted segment is getting AAR data feeds, then it may be assumed that
+      those AAR data feeds from the RatingsProvider will simply reflect the temporary
+      condition.
+      
+      However, this doesn't always apply, leading to the second usage.  Actual rating
+      values may also be provided for the TemporaryReading, when we cannot expect AAR
+      feeds otherwise.  This occurs in two scenarios:
+      1.  It is required when the Transmission Provider is generating forecast rating proposals, 
+          from lookup tables for example.  There is no external AAR data feed, and the 
+          Transmission Provider wouldn't otherwise know
+          how to forecast the ratings given this temporary condition.  For these
+          scenarios, a complete rating value set MUST be provided.
+      2.  For facilities where AAR data is provided, it is possible that the AAR data
+          feed could be down for some reason.  Therefore, this provides a placeholder set
+          of numbers until the AAR data feed is repaired.
 paths:
   /limits/forecast-snapshot:
     get:
@@ -118,6 +160,12 @@ paths:
         relative to the current time.  
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
+        This operation uses media types to control verbosity of the data fetched.  
+        The default media type (application/vnd.trolie.forecast-limit-set.v1+json) 
+        simply includes the rating data.  For applications that need it, the media type
+        application/vnd.trolie.forecast-limit-with-audit-trail-set.v1+json may be requested, 
+        which also references the source proposals used to generate the snapshot, as well as 
+        reporting data from the ratings clearing process.  
       tags:
         - Operating Snapshots
       parameters:
@@ -148,6 +196,34 @@ paths:
                 _embedded:
                   forecasts:
                   - _links:
+                      transmission-facility:
+                        href: /reference-data/transmission-facilities/line2
+                        name: line2
+                    periods:
+                    - period-start: "2023-07-12T16:00:00-07:00"
+                      updated-time: "2023-07-12T13:05:43.044267100-07:00"
+                      values: 
+                      - type: normal
+                        value:
+                          mva: 160
+                      - type: emergency
+                        value:
+                          mva: 165
+                      - type: loadshed
+                        value:
+                          mva: 170
+            application/vnd.trolie.forecast-limit-with-audit-trail-set.v1+json:
+              schema:
+                $ref: '#/components/schemas/forecast-limit-with-audit-trail-set'
+              example:
+                _links:
+                  self: 
+                    href: /limits/forecast-snapshot
+                total-count: 1
+                offset: 0
+                _embedded:
+                  forecasts:
+                  - _links:
                       provenant-proposals:
                       - href: /rating-proposals/forecasts/12345
                       transmission-facility:
@@ -165,7 +241,7 @@ paths:
                           mva: 165
                       - type: loadshed
                         value:
-                          mva: 170
+                          mva: 170                          
             application/json:
               schema:
                 $ref: '#/components/schemas/forecast-limit-set'
@@ -342,6 +418,32 @@ paths:
                 _embedded:
                   limits:
                   - _links:
+                      transmission-facility:
+                        href: /reference-data/transmission-facilities/line2
+                        name: line2
+                    updated-time: "2023-07-12T13:05:43.044267100-07:00"
+                    values: 
+                    - type: normal
+                      value:
+                        mva: 160
+                    - type: emergency
+                      value:
+                        mva: 165
+                    - type: loadshed
+                      value:
+                        mva: 170 
+            application/vnd.trolie.realtime-limit-with-audit-trail-set.v1+json:
+              schema:
+                $ref: '#/components/schemas/realtime-limit-with-audit-trail-set'       
+              example:
+                _links:
+                  self: 
+                    href: /limits/realtime-snapshot
+                total-count: 1
+                offset: 0
+                _embedded:
+                  limits:
+                  - _links:
                       provenant-proposals:
                       - href: /rating-proposals/realtime/67890
                       transmission-facility:
@@ -357,7 +459,7 @@ paths:
                         mva: 165
                     - type: loadshed
                       value:
-                        mva: 170 
+                        mva: 170                         
             application/json:
               schema:
                 $ref: '#/components/schemas/realtime-limit-set'                      
@@ -598,7 +700,6 @@ paths:
         "429": *common429
         default: *commonDefaultErr
       security: *snapshotReadSecurity
-
 
   /rating-proposals/forecasts:
     get:
@@ -1022,6 +1123,372 @@ paths:
       responses: *headResponses
 
       security: *forecastproposalReadSecurity      
+
+  /temporary-ratings:
+    get:
+      operationId: getTemporaryRatings
+      description: >
+        Search for temporary ratings.  Will return any temporary ratings that overlap with the 
+        start/end period.  
+
+        Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
+        and the `ETag` of a previous `GET` response.
+      tags:
+        - Temporary Ratings
+      parameters:
+        - $ref: '#/components/parameters/period-start-query'
+        - $ref: '#/components/parameters/period-end'
+        - $ref: '#/components/parameters/monitoring-set-filter'
+        - $ref: '#/components/parameters/segment-filter'
+        - $ref: '#/components/parameters/geographical-region-filter'
+        - $ref: '#/components/parameters/subgeographical-region-filter'        
+        - $ref: '#/components/parameters/naming-scheme'
+        - $ref: '#/components/parameters/limit-units'                 
+      responses: 
+        "200":
+          description: OK
+          content:
+            application/vnd.trolie.temporary-rating-set.v1+json:
+              schema:
+                $ref: '#/components/schemas/temporary-rating-set'
+              example:
+                _links:
+                  self:
+                    href: /temporary-ratings
+                total-count: 1
+                offset: 0
+                _embedded:
+                  temporary-ratings:
+                  - _links:
+                      self: 
+                        href: /temporary-ratings/46f7212b-1633-4c30-ba71-c6e987b2ded7
+                      segment: 
+                        href: /reference-data/network-segments/segmentX
+                        name: segmentX
+                    id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
+                    segment-id: segmentX      
+                    start-time: "2025-07-12T16:00:00-07:00"
+                    end-time:  "2025-07-13T12:00:00-07:00"     
+                    updated-time: "2025-07-08T13:05:43.044267100-07:00"
+                    values:
+                    - type: normal
+                      value:
+                        mva: 160
+                    - type: emergency
+                      value:
+                        mva: 165
+                    - type: loadshed
+                      value:
+                        mva: 170  
+                    temporary-aar-exception: true
+                    temporary-seasonal-rating: false
+                    reason: Free-form text reason.  
+            application/json:
+              schema:
+                $ref: '#/components/schemas/temporary-rating-set'                                          
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'
+            X-TROLIE-Limit-Units:
+              $ref: '#/components/headers/X-TROLIE-Limit-Units'
+            X-TROLIE-Naming-Scheme:
+              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+            ETag:
+              $ref: '#/components/headers/ETag'
+        "304": *common304
+        "400": *query400
+        "401": *common401
+        "403": *common403
+        "404": *common404          
+        "406": *common406
+        "410": *common410        
+        "429": *common429
+        default: *commonDefaultErr
+      security: &temporaryRatingReadSecurity
+        - oauth2-primary-flow:
+          - "read:temporary-ratings"       
+    head:
+      operationId: getTemporaryRatingsHeaders
+      description: >
+        Use to obtain the headers that would be returned for 
+        `getTemporaryRatings`. Useful for cache invalidation.
+      tags:
+        - Temporary Ratings
+      parameters:
+        - $ref: '#/components/parameters/period-start-query'
+        - $ref: '#/components/parameters/period-end'
+        - $ref: '#/components/parameters/monitoring-set-filter'
+        - $ref: '#/components/parameters/segment-filter'
+        - $ref: '#/components/parameters/geographical-region-filter'
+        - $ref: '#/components/parameters/subgeographical-region-filter'             
+        - $ref: '#/components/parameters/naming-scheme'
+        - $ref: '#/components/parameters/limit-units'
+        - $ref: '#/components/parameters/max-records'
+        - $ref: '#/components/parameters/record-offset'        
+      responses: *headResponses
+
+      security: *temporaryRatingReadSecurity
+
+    post:
+      operationId: createTemporaryRating
+      description: >
+        Create a new temporary rating
+      tags:
+        - Temporary Ratings
+      parameters:
+        - $ref: '#/components/parameters/naming-scheme'
+        - $ref: '#/components/parameters/limit-units'    
+      requestBody: &updateTemporaryRating
+        content:
+          application/vnd.trolie.temporary-rating.v1+json:
+            schema:
+              $ref: '#/components/schemas/temporary-rating'   
+            example:
+              segment-id: segmentX      
+              start-time: "2025-07-12T16:00:00-07:00"
+              end-time:  "2025-07-13T12:00:00-07:00"     
+              values:
+              - type: normal
+                value:
+                  mva: 160
+              - type: emergency
+                value:
+                  mva: 165
+              - type: loadshed
+                value:
+                  mva: 170  
+              temporary-aar-exception: true
+              temporary-seasonal-rating: false
+              reason: Free-form text reason.  
+          application/json:
+            schema:
+              $ref: '#/components/schemas/temporary-rating'                                                             
+      responses: &updateTemporaryRatingResponse
+        "201": 
+          description: >
+            The temporary rating was created
+          content:
+            application/vnd.trolie.temporary-rating.v1+json:
+              schema:
+                $ref: '#/components/schemas/temporary-rating'
+              example:
+                _links:
+                  self: 
+                    href: /temporary-ratings/46f7212b-1633-4c30-ba71-c6e987b2ded7
+                  segment: 
+                    href: /reference-data/network-segments/segmentX
+                    name: segmentX
+                id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
+                segment-id: segmentX      
+                start-time: "2025-07-12T16:00:00-07:00"
+                end-time:  "2025-07-13T12:00:00-07:00"     
+                updated-time: "2025-07-08T13:05:43.044267100-07:00"
+                values:
+                - type: normal
+                  value:
+                    mva: 160
+                - type: emergency
+                  value:
+                    mva: 165
+                - type: loadshed
+                  value:
+                    mva: 170  
+                temporary-aar-exception: true
+                temporary-seasonal-rating: false
+                reason: Free-form text reason.  
+            application/json:
+              schema:
+                $ref: '#/components/schemas/temporary-rating'                                           
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'
+            X-TROLIE-Limit-Units:
+              $ref: '#/components/headers/X-TROLIE-Limit-Units'
+            X-TROLIE-Naming-Scheme:
+              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+            ETag:
+              $ref: '#/components/headers/ETag'
+        "304": *common304
+        "400": &submit400
+          description: >
+            Malformed request, proposal is invalid.  Details are in error messages.  
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validation-messages'
+            application/vnd.trolie.validation-messages.v1+json:
+              schema:
+                $ref: '#/components/schemas/validation-messages'
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'
+        "401": *common401
+        "403": *common403
+        "404": *common404          
+        "406": *common406
+        "413": &common413
+           $ref: '#/components/responses/payload-too-large'
+        "429": *common429
+        default: *commonDefaultErr   
+      security: &temporaryRatingWriteSecurity
+        - oauth2-primary-flow:
+          - "write:temporary-ratings"  
+ 
+  /temporary-ratings/{id}:
+    get:
+      operationId: getTemporaryRating
+      description: >
+        Obtain a specific temporary rating by Id.  
+      tags:
+        - Temporary Ratings
+      parameters:
+        - $ref: '#/components/parameters/id'   
+        - $ref: '#/components/parameters/naming-scheme'                    
+      responses: 
+        "200":
+          description: OK
+          content:
+            application/vnd.trolie.temporary-rating.v1+json:
+              schema:
+                $ref: '#/components/schemas/temporary-rating'
+              example:
+                _links:
+                  self: 
+                    href: /temporary-ratings/46f7212b-1633-4c30-ba71-c6e987b2ded7
+                  segment: 
+                    href: /reference-data/network-segments/segmentX
+                    name: segmentX
+                id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
+                segment-id: segmentX      
+                start-time: "2025-07-12T16:00:00-07:00"
+                end-time:  "2025-07-13T12:00:00-07:00"     
+                updated-time: "2025-07-08T13:05:43.044267100-07:00"
+                values:
+                - type: normal
+                  value:
+                    mva: 160
+                - type: emergency
+                  value:
+                    mva: 165
+                - type: loadshed
+                  value:
+                    mva: 170  
+                temporary-aar-exception: true
+                temporary-seasonal-rating: false
+                reason: Free-form text reason.  
+            application/json:
+              schema:
+                $ref: '#/components/schemas/temporary-rating'                                  
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'
+            X-TROLIE-Naming-Scheme:
+              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+            ETag:
+              $ref: '#/components/headers/ETag'
+        "304": *common304
+        "400": *query400
+        "401": *common401
+        "403": *common403
+        "404": *common404          
+        "406": *common406
+        "429": *common429
+        default: *commonDefaultErr   
+      security: *temporaryRatingReadSecurity
+    delete:
+      operationId: deleteTemporaryRating
+      description: >
+        Delete a specific temporary rating by Id.  
+      tags:
+        - Temporary Ratings
+      parameters:
+        - $ref: '#/components/parameters/id'                      
+      responses: 
+        "200":
+          description: OK
+        "304": *common304
+        "400": *submit400
+        "401": *common401
+        "403": *common403
+        "404": *common404          
+        "406": *common406
+        "429": *common429
+        default: *commonDefaultErr   
+      security: *temporaryRatingWriteSecurity         
+    put:
+      operationId: updateTemporaryRating
+      description: >
+        Updates an existing Temporary Rating.  
+      tags:
+        - Temporary Ratings
+      parameters:
+        - $ref: '#/components/parameters/id'         
+        - $ref: '#/components/parameters/naming-scheme'  
+      requestBody:
+        content:
+          application/vnd.trolie.update.v1+json:
+            schema:
+              $ref: '#/components/schemas/temporary-rating'    
+            example:
+                id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
+                segment-id: segmentX      
+                start-time: "2025-07-12T16:00:00-07:00"
+                end-time:  "2025-07-13T12:00:00-07:00"     
+                values:
+                - type: normal
+                  value:
+                    mva: 160
+                - type: emergency
+                  value:
+                    mva: 165
+                - type: loadshed
+                  value:
+                    mva: 170  
+                temporary-aar-exception: true
+                temporary-seasonal-rating: false
+                reason: Free-form text reason.  
+          application/json:
+            schema:
+              $ref: '#/components/schemas/temporary-rating'                                    
+      responses: 
+        "200": 
+          description: >
+            The temporary rating was updated
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'           
+            ETag:
+              $ref: '#/components/headers/ETag'
+        "304": *common304
+        "400": *submit400
+        "401": *common401
+        "403": *common403
+        "404": *common404          
+        "406": *common406
+        "413": *common413        
+        "429": *common429
+        default: *commonDefaultErr   
+      security: *temporaryRatingWriteSecurity          
 
   /rating-proposals/realtime:
     get:
@@ -1629,9 +2096,7 @@ paths:
       responses: 
         "201": 
           description: >
-            The update was accepted for later processing. Updates to 
-            ratings may need to undergo additional validation and propagation
-            to other systems.
+            The monitoring set was created.  
           content:
             application/json:
               schema:
@@ -2520,6 +2985,15 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/period-start'
+
+    period-start-query:
+      name: period-start
+      description: >
+        Defines the start of an applicable operating period.  
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/period-start'         
     period-end:
       name: period-end
       description: Specifies the end of a period for which a filter specifies.  Periods will only be returned that start prior to this time.  
@@ -2738,6 +3212,38 @@ components:
           minimum: 0
           maximum: 1        
                                
+    limit-audit-trail: 
+      type: object
+      description: Given a limit value, a set of data defining the provenance of that limit.  
+      properties:
+        _links: 
+          type: object
+          properties:
+            provenant-proposals:
+              description: |
+                Set of links to proposals that affect this limit.  In the case of forecast proposals, this should ideally be a link 
+                to the relevantly filtered `getLimitsForecastByPeriod` resource filtered to the relevant period.  
+              type: array
+              items: 
+                $ref: "#/components/schemas/hal-link"   
+            temporary-ratings:
+              description: |
+                Set of links to temporary raings that affect this limit.  
+              type: array
+              items: 
+                $ref: "#/components/schemas/hal-link"                    
+            limiting-segment:
+              $ref: "#/components/schemas/hal-link"    
+        override-reason:
+          description: | 
+            If provided, indicates that this limit was overridden for some reason, the reason itself.  
+            If not provided, users may assume no override is in place.  
+          type: string  
+        additional-data:
+          description: |
+            Implementors may use this object to provide freeform extensions with additional audit data to be included with the limit.  
+            Schema of this object is out of scope of the TROLIE specification.  
+          type: object
 
 
     realtime-limit-set:
@@ -2755,16 +3261,27 @@ components:
                 items:
                   $ref: '#/components/schemas/realtime-limit-item'
 
+    realtime-limit-with-audit-trail-set:
+      allOf:
+      - $ref: '#/components/schemas/paged-resource'
+      - type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              limits:
+                type: array
+                minItems: 0
+                maxItems: 50000 
+                items:
+                  $ref: '#/components/schemas/realtime-limit-with-audit-trail-item'                  
+
     realtime-limit-item:
       type: object
       properties:
         _links: 
           type: object
-          properties:
-            provenant-proposals:
-              type: array
-              items: 
-                $ref: "#/components/schemas/hal-link"      
+          properties: 
             transmission-facility: 
               $ref: '#/components/schemas/hal-link'      
         updated-time:
@@ -2772,10 +3289,15 @@ components:
         values:
           $ref: '#/components/schemas/limit-value-set'
 
-
+    realtime-limit-with-audit-trail-item:
+      allOf:
+      - $ref: '#/components/schemas/realtime-limit-item' 
+      - $ref: '#/components/schemas/limit-audit-trail'  
 
 
     forecast-limit-set:
+      description: |
+        Simple forecast 
       allOf:
       - $ref: '#/components/schemas/paged-resource'
       - type: object
@@ -2790,17 +3312,30 @@ components:
                 items:
                   $ref: '#/components/schemas/forecast-limit-item'
 
+    forecast-limit-with-audit-trail-set:
+      description: |
+        Forecast including audit trail information.  
+      allOf:
+      - $ref: '#/components/schemas/paged-resource'
+      - type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              forecasts:
+                type: array
+                minItems: 0
+                maxItems: 50000 
+                items:
+                  $ref: '#/components/schemas/forecast-limit-with-audit-trail-item'                  
+
     forecast-limit-item:
       type: object 
       additionalProperties: false
       properties:
         _links: 
           type: object
-          properties:
-            provenant-proposals:
-              type: array
-              items: 
-                $ref: "#/components/schemas/hal-link"      
+          properties:    
             transmission-facility: 
               $ref: '#/components/schemas/hal-link'  
         periods:
@@ -2808,6 +3343,19 @@ components:
           items:
             $ref: '#/components/schemas/forecast-limit-period'
           
+    forecast-limit-with-audit-trail-item:
+      type: object 
+      additionalProperties: false
+      properties:
+        _links: 
+          type: object
+          properties:  
+            transmission-facility: 
+              $ref: '#/components/schemas/hal-link'  
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/forecast-limit-with-audit-trail-period'          
     
     forecast-limit-period:
       type: object
@@ -2819,6 +3367,11 @@ components:
           $ref: '#/components/schemas/timestamp'
         values:
           $ref: '#/components/schemas/limit-value-set'
+
+    forecast-limit-with-audit-trail-period:
+      allOf:
+      - $ref: '#/components/schemas/forecast-limit-period'   
+      - $ref: '#/components/schemas/limit-audit-trail'         
         
     seasonal-rating-snapshot: 
       allOf:
@@ -3274,7 +3827,67 @@ components:
           $ref: '#/components/schemas/generic-identifier'
         name:
           $ref: '#/components/schemas/generic-identifier'
+
+    temporary-rating:
+      type: object
+      additionalProperties: false
+      description: |
+        Data structure for a temporary rating against a segment.
+        Includes a unique ID, start and (optional) end time, and a reason.  
+
+        May include a set of values, which apply if this temporary rating
+        is either an AAR Exception or temporary seasonal rating.  
+
+      properties:
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/hal-links-block'
+          - type: object
+            properties:
+              segment: 
+                $ref: '#/components/schemas/hal-link'
+        id:
+          $ref: '#/components/schemas/generic-identifier'  
+        segment-id: 
+          $ref: '#/components/schemas/generic-identifier'       
+        start-time: 
+          $ref: '#/components/schemas/period-start'
+        end-time: 
+          $ref: '#/components/schemas/period-start'       
+        updated-time:
+          $ref: '#/components/schemas/timestamp'
+        values:
+          $ref: '#/components/schemas/limit-value-set'
+        temporary-aar-exception:
+          description: |
+            If true, indicates that this temporary rating is to be used as an alternative to AAR data
+            feeds.  The set of values will be used in place of forecast proposals.  
+          type: boolean
+        temporary-seasonal-rating:
+          description: |
+            If true, indicates that the current seasonal rating is overridden by the set of values.  
+          type: boolean
+        reason:
+          description: |
+            Free-form text indicating the reason for the temporary rating.  
+          type: string
           
+    temporary-rating-set:
+      allOf:
+      - $ref: '#/components/schemas/paged-resource'
+      - type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              temporary-ratings:
+                type: array
+                minItems: 0
+                maxItems: 1000 
+                items:
+                  $ref: '#/components/schemas/temporary-rating'
+
+
 
     transmission-facility-set:
       allOf:
@@ -3805,9 +4418,11 @@ components:
             "read:forecast-proposals": "Read Forecast rating proposals"
             "read:realtime-proposals": "Read real-time rating proposals"
             "read:seasonal-proposals": "Read seasonal rating proposals"
+            "read:temporary-ratings": "Read temporary ratings"
             "write:forecast-proposals": "Submit forecasted ratings"
             "write:realtime-proposals": "Submit realtime ratings"
             "write:seasonal-proposals": "Submit seasonal ratings"
+            "write:temporary-ratings": "Write temporary ratings"
             "read:monitoring-set": "Read monitoring set definitions"
             "write:monitoring-sets": "Write monitoring set definitions"
             "read:operating-snapshot": "Read the ratings and limits snapshots in-use by the transmission provider"
