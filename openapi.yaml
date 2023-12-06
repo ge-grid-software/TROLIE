@@ -123,7 +123,7 @@ tags:
     
       The purpose and behavior of a temporary rating is two-fold.
    
-      First, according to NERC, all exceptions to normal rating
+      First, according to FERC, all exceptions to normal rating
       must be documented and kept with history.  The actual numbers for the
       forecasted and real-time feeds may still continue through proposals submitted to 
       TROLIE. However, the presence of a temporary
@@ -184,7 +184,7 @@ paths:
           description: >
             The requested operating forecast snapshot is returned.
           content:
-            application/vnd.trolie.forecast-limit-set.v1+json:
+            application/vnd.trolie.forecast-limit-set-slim.v1+json:
               schema:
                 $ref: '#/components/schemas/forecast-limit-set'
               example:
@@ -212,9 +212,9 @@ paths:
                       - type: loadshed
                         value:
                           mva: 170
-            application/vnd.trolie.forecast-limit-with-audit-trail-set.v1+json:
+            application/vnd.trolie.forecast-limit-set-detailed.v1+json:
               schema:
-                $ref: '#/components/schemas/forecast-limit-with-audit-trail-set'
+                $ref: '#/components/schemas/forecast-limit-set-detailed'
               example:
                 _links:
                   self: 
@@ -415,7 +415,7 @@ paths:
           description: >
             The System Operating Limits snapshot is returned.
           content:
-            application/vnd.trolie.realtime-limit-set.v1+json:
+            application/vnd.trolie.realtime-limit-set-slim.v1+json:
               schema:
                 $ref: '#/components/schemas/realtime-limit-set'       
               example:
@@ -441,9 +441,9 @@ paths:
                     - type: loadshed
                       value:
                         mva: 170 
-            application/vnd.trolie.realtime-limit-with-audit-trail-set.v1+json:
+            application/vnd.trolie.realtime-limit-set-detailed.v1+json:
               schema:
-                $ref: '#/components/schemas/realtime-limit-with-audit-trail-set'       
+                $ref: '#/components/schemas/realtime-limit-set-detailed'       
               example:
                 _links:
                   self: 
@@ -3278,7 +3278,7 @@ components:
                 items:
                   $ref: '#/components/schemas/realtime-limit-item'
 
-    realtime-limit-with-audit-trail-set:
+    realtime-limit-set-detailed:
       allOf:
       - $ref: '#/components/schemas/paged-resource'
       - type: object
@@ -3291,7 +3291,7 @@ components:
                 minItems: 0
                 maxItems: 50000 
                 items:
-                  $ref: '#/components/schemas/realtime-limit-with-audit-trail-item'                  
+                  $ref: '#/components/schemas/realtime-limit-item-detailed'                  
 
     realtime-limit-item:
       type: object
@@ -3306,7 +3306,7 @@ components:
         values:
           $ref: '#/components/schemas/limit-value-set'
 
-    realtime-limit-with-audit-trail-item:
+    realtime-limit-item-detailed:
       allOf:
       - $ref: '#/components/schemas/realtime-limit-item' 
       - $ref: '#/components/schemas/limit-audit-trail'  
@@ -3329,7 +3329,7 @@ components:
                 items:
                   $ref: '#/components/schemas/forecast-limit-item'
 
-    forecast-limit-with-audit-trail-set:
+    forecast-limit-set-detailed:
       description: |
         Forecast including audit trail information.  
       allOf:
@@ -3344,7 +3344,7 @@ components:
                 minItems: 0
                 maxItems: 50000 
                 items:
-                  $ref: '#/components/schemas/forecast-limit-with-audit-trail-item'                  
+                  $ref: '#/components/schemas/forecast-limit-item-detailed'                  
 
     forecast-limit-item:
       type: object 
@@ -3360,7 +3360,7 @@ components:
           items:
             $ref: '#/components/schemas/forecast-limit-period'
           
-    forecast-limit-with-audit-trail-item:
+    forecast-limit-item-detailed:
       type: object 
       additionalProperties: false
       properties:
@@ -3372,7 +3372,7 @@ components:
         periods:
           type: array
           items:
-            $ref: '#/components/schemas/forecast-limit-with-audit-trail-period'          
+            $ref: '#/components/schemas/forecast-limit-period-detailed'          
     
     forecast-limit-period:
       type: object
@@ -3384,7 +3384,7 @@ components:
         values:
           $ref: '#/components/schemas/limit-value-set'
 
-    forecast-limit-with-audit-trail-period:
+    forecast-limit-period-detailed:
       allOf:
       - $ref: '#/components/schemas/forecast-limit-period'   
       - $ref: '#/components/schemas/limit-audit-trail'         
