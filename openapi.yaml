@@ -175,8 +175,6 @@ paths:
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: &forecastSnapshotReadResponses
@@ -264,10 +262,6 @@ paths:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
               $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'
             ETag:
               $ref: '#/components/headers/ETag'
         "304": &common304
@@ -319,9 +313,7 @@ paths:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'        
+        - $ref: '#/components/parameters/subgeographical-region-filter'             
       responses: &headResponses
         "200": 
           description: OK
@@ -370,8 +362,6 @@ paths:
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units' 
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                  
       responses: *forecastSnapshotReadResponses
@@ -385,8 +375,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/period-start'
         - $ref: '#/components/parameters/monitoring-set-filter'
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'       
       responses: *headResponses
 
       security: *snapshotReadSecurity
@@ -404,8 +392,6 @@ paths:
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units' 
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       tags:
@@ -486,11 +472,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'          
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -514,8 +496,6 @@ paths:
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'         
       responses: *headResponses
       security: *snapshotReadSecurity
   
@@ -530,8 +510,6 @@ paths:
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'        
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'              
       responses:
@@ -580,11 +558,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'             
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -608,8 +582,6 @@ paths:
         - $ref: '#/components/parameters/facility-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'         
       responses: *headResponses
       security: *snapshotReadSecurity
 
@@ -737,8 +709,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                 
       responses: &ratingProposalsGetResponse
         "200":
           description: OK
@@ -782,11 +752,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'          
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -815,8 +781,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'             
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -829,9 +793,6 @@ paths:
         Update the logged-in provider's ratings Forecast Proposal 
       tags:
         - Rating Proposals
-      parameters:
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'    
       requestBody: &patchForecastRequest
         content:
           application/vnd.trolie.rating-forecast-proposal.v1+json:
@@ -904,11 +865,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'          
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -956,8 +913,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'             
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                      
       responses: *ratingProposalsGetResponse
@@ -970,8 +925,6 @@ paths:
         - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/ratings-provider'         
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'    
       requestBody: *patchForecastRequest
       responses: *patchForecastResponse
       security: *forecastWriteSecurity      
@@ -991,7 +944,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: 
@@ -1024,9 +976,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'            
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1050,7 +1000,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -1073,7 +1022,6 @@ paths:
         - $ref: '#/components/parameters/ratings-provider'
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: 
@@ -1107,9 +1055,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'            
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1134,7 +1080,6 @@ paths:
         - $ref: '#/components/parameters/ratings-provider'      
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -1159,8 +1104,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'        
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                 
       responses: 
         "200":
           description: OK
@@ -1209,11 +1152,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'           
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1242,8 +1181,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'             
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -1256,9 +1193,6 @@ paths:
         Create a new temporary rating
       tags:
         - Temporary Ratings
-      parameters:
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'    
       requestBody: &updateTemporaryRating
         content:
           application/vnd.trolie.temporary-rating.v1+json:
@@ -1326,11 +1260,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'            
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1372,7 +1302,6 @@ paths:
         - Temporary Ratings
       parameters:
         - $ref: '#/components/parameters/id'   
-        - $ref: '#/components/parameters/naming-scheme'                    
       responses: 
         "200":
           description: OK
@@ -1414,9 +1343,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'          
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1456,7 +1383,6 @@ paths:
         - Temporary Ratings
       parameters:
         - $ref: '#/components/parameters/id'         
-        - $ref: '#/components/parameters/naming-scheme'  
       requestBody:
         content:
           application/vnd.trolie.update.v1+json:
@@ -1520,10 +1446,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
+        - $ref: '#/components/parameters/geographical-region-filter'  
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: 
@@ -1572,11 +1495,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'             
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1602,8 +1521,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'             
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -1616,9 +1533,6 @@ paths:
         Post a new RealTime Rating Proposal 
       tags:
         - Rating Proposals
-      parameters:
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'    
       requestBody:
         content:
           application/vnd.trolie.realtime-rating-proposal.v1+json:
@@ -1683,11 +1597,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'            
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1712,8 +1622,6 @@ paths:
         - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/proposal-id'   
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                      
       responses: 
         "200":
           description: OK
@@ -1753,11 +1661,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'             
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1785,8 +1689,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'             
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: &seasonalProposalGetResponse
@@ -1836,11 +1738,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'             
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1866,8 +1764,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'     
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'    
       responses: *headResponses
 
       security: *seasonalproposalReadSecurity
@@ -1878,9 +1774,6 @@ paths:
         Update this Provider's Rating Proposal 
       tags:
         - Rating Proposals
-      parameters:
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'    
       requestBody: &seasonalProposalUpdateRequest
         content:
           application/vnd.trolie.seasonal-rating-proposal.v1+json:
@@ -1957,11 +1850,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Limit-Units:
-              $ref: '#/components/headers/X-TROLIE-Limit-Units'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'            
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -1990,8 +1879,6 @@ paths:
         - $ref: '#/components/parameters/segment-filter'
         - $ref: '#/components/parameters/geographical-region-filter'
         - $ref: '#/components/parameters/subgeographical-region-filter'     
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                       
       responses: *seasonalProposalGetResponse
       security: *seasonalproposalReadSecurity
     patch:
@@ -2002,8 +1889,6 @@ paths:
         - Rating Proposals
       parameters:
         - $ref: '#/components/parameters/ratings-provider'         
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units' 
       requestBody: *seasonalProposalUpdateRequest   
       responses: *seasonalProposalUpdateResponse
       security: *seasonalWriteSecurity
@@ -2020,7 +1905,6 @@ paths:
       tags:
         - Monitoring Sets
       parameters:
-        - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: 
@@ -2050,9 +1934,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'            
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -2075,7 +1957,6 @@ paths:
       tags:
         - Monitoring Sets
       parameters:
-        - $ref: '#/components/parameters/naming-scheme'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -2088,8 +1969,6 @@ paths:
         Create a new Monitoring Set
       tags:
         - Monitoring Sets
-      parameters:
-        - $ref: '#/components/parameters/naming-scheme'  
       requestBody:
         content:
           application/vnd.trolie.monitoring-set.v1+json:
@@ -2127,9 +2006,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'          
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -2154,7 +2031,6 @@ paths:
         - Monitoring Sets
       parameters:
         - $ref: '#/components/parameters/id'   
-        - $ref: '#/components/parameters/naming-scheme'                    
       responses: 
         "200":
           description: OK
@@ -2184,9 +2060,7 @@ paths:
             X-Rate-Limit-Remaining:
               $ref: '#/components/headers/X-Rate-Limit-Remaining'
             X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'
-            X-TROLIE-Naming-Scheme:
-              $ref: '#/components/headers/X-TROLIE-Naming-Scheme'              
+              $ref: '#/components/headers/X-Rate-Limit-Reset'        
             ETag:
               $ref: '#/components/headers/ETag'
         "304": *common304
@@ -2226,7 +2100,6 @@ paths:
         - Monitoring Sets
       parameters:
         - $ref: '#/components/parameters/id'         
-        - $ref: '#/components/parameters/naming-scheme'  
       requestBody:
         content:
           application/vnd.trolie.monitoring-set.v1+json:
@@ -2351,9 +2224,7 @@ paths:
       tags:
         - Reference Data
       parameters:
-        - $ref: '#/components/parameters/id'   
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                      
+        - $ref: '#/components/parameters/id'                    
       responses: 
         "200":
           description: OK
@@ -2469,9 +2340,7 @@ paths:
       tags:
         - Reference Data
       parameters:
-        - $ref: '#/components/parameters/id'   
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                      
+        - $ref: '#/components/parameters/id'              
       responses: 
         "200":
           description: OK
@@ -2791,9 +2660,7 @@ paths:
       tags:
         - Reference Data
       parameters:
-        - $ref: '#/components/parameters/id'   
-        - $ref: '#/components/parameters/naming-scheme'
-        - $ref: '#/components/parameters/limit-units'                      
+        - $ref: '#/components/parameters/id'                      
       responses: 
         "200":
           description: OK
@@ -3029,7 +2896,7 @@ components:
     facility-filter:
       name: transmission-facility
       description: >
-        Only return limits for this transmission facility.  Respects `X-TROLIE-Naming-Scheme` header for looking up name.  
+        Only return limits for this transmission facility.  
       in: query
       required: false
       schema:
@@ -3037,7 +2904,7 @@ components:
     segment-filter:
       name: segment
       description: >
-        Only return limits for this segment.  Respects `X-TROLIE-Naming-Scheme` header for looking up name.  
+        Only return limits for this segment.  
       in: query
       required: false
       schema:
@@ -3058,39 +2925,6 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/generic-identifier'                   
-
-    naming-scheme:
-      name: X-TROLIE-Naming-Scheme
-      description: |
-        Indicates the naming scheme used by this operation.  The names of transmission facilities and segments
-        will vary depending on their use.  CIM Master Resource Identifiers (mRIDs) may be used, as well
-        as names used by the EMS or other systems.  The list of naming schemes supported, as well as the current default, 
-        is a function of the TROLIE implementation.  All names of all facilities are available in the getNetworkSegments and 
-        getTransmissionFacilities operations.  The list of all naming conventions and the configured default is available in the 
-        getNetworkNamingConventions operation.        
-      in: header
-      required: false
-      schema:
-        type: string
-        example: CIM-MRIDs
-
-    limit-units:
-      name: X-TROLIE-Limit-Units
-      description: |
-        By default, all limits and ratings are assumed to be in megavolt-amperes (MVA).  However, TROLIE implementations _may_ support 
-        alternative units, for both submittal and query, under the following circumstances:
-
-        * Current (amps) may be used if the given segment or transmission facility has a nominal voltage configured in the model.  
-          Conversion from/to MVA will be done assuming this nominal voltage.  Submittals in amps for segments without 
-          a nominal voltage in amps will return null, and submittals in amps will not be allowed for such segments.  
-        * A combination of actual power in megawatts (MW) and an assumed power factor (PF) in MW/MVA.  The MW and PF pairs must be offered together
-          in submittals.  Queries for this form will return null for ratings/limits that were not originally submitted in this form.  
-
-        The ability to negotiate limit units in this way is an optional feature of the TROLIE implementation. 
-      in: header
-      required: false
-      schema:
-        $ref: '#/components/schemas/limit-units'
 
 
   schemas:
@@ -4172,12 +4006,6 @@ components:
       format: date-time
       maxLength: 35
       pattern: '^([0-9]{4})-([0-9]{2})-([0-9]{2})[Tt]([0-9]{2}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,10})?([Zz]|([+-])([0-9]{2}):([0-9]{2}))$'
-    limit-units:
-      type: string
-      enum:
-      - mva
-      - amps
-      - pfmw    
       
     empty:
       description: Intended to proactively avoid information disclosure
@@ -4395,30 +4223,6 @@ components:
         anyOf:
           - $ref: '#/components/schemas/hash'
           - $ref: '#/components/schemas/origin-id'
-    X-TROLIE-Naming-Scheme:
-      description: |
-        Indicates the naming scheme used by this operation.  The names of transmission facilities and segments
-        will vary depending on their use.  CIM Master Resource Identifiers (mRIDs) may be used, as well
-        as names used by the EMS or other systems.  The list of naming schemes supported, as well as the current default, 
-        is a function of the TROLIE implementation.  All names of all transmission facilities are available in the getNetworkSegments and 
-        getTransmissionFacilities operations.  The list of all naming conventions and the configured default is available in the 
-        getNetworkNamingConventions operation.              
-      schema:
-        type: string    
-    X-TROLIE-Limit-Units:
-      description: |
-        By default, all limits and ratings are assumed to be in megavolt-amperes (MVA).  However, TROLIE implementations _may_ support 
-        alternative units, for both submittal and query, under the following circumstances:
-
-        * Current (amps) may be used if the given segment or transmission facility has a nominal voltage configured in the model.  
-          Conversion from/to MVA will be done assuming this nominal voltage.  Submittals in amps for segments without 
-          a nominal voltage in amps will return null, and submittals in amps will not be allowed for such segments.  
-        * A combination of actual power in megawatts (MW) and an assumed power factor (PF) in MW/MVA.  The MW and PF pairs must be offered together
-          in submittals.  Queries for this form will return null for ratings/limits that were not originally submitted in this form.  
-
-        The ability to negotiate limit units in this way is an optional feature of the TROLIE implementation.  
-      schema:
-        $ref: '#/components/schemas/limit-units'
 
   securitySchemes:
     # Note that other OAuth flows may be allowed.  Here, an OAuth Client credential flow is assumed, and is 
