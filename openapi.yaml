@@ -42,15 +42,6 @@ info:
 
     <img src="images/TROLIE interactions.svg" alt="TROLIE Interactions" />
 
-    <b>HAL / HATEOAS Link Conventions</b>
-
-    This API makes significant use of the REST HATEOAS pattern, using HAL conventions.  This means that relationships between resources
-    are provided through links that are navigable through GET requests.  On submittal (POST, PUT or PATCH requests), this may be confusing when a particular
-    relationship must be provided by the client.  The request bodies shall also include identifiers of the related elements.  Users shouldn't populate links- rather, these
-    are populated by the system, and are fetchable on GET.  As shown in the example in `patchRatingForecastProposal`, `segmentX` may be referenced by setting 
-    segment-id = segmentX.  When a Get for the same data, using `getRatingForecastsProposals`
-    the href = /reference-data/network-segments/segmentX   
-
   version: '0.1.0-wip'
   contact: 
     name: Tory McKeag
@@ -173,8 +164,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: &forecastSnapshotReadResponses
         "200": 
           description: >
@@ -184,69 +173,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/forecast-limit-set'
               example:
-                _links:
-                  self: 
-                    href: /limits/forecast-snapshot
-                total-count: 1
-                offset: 0
-                _embedded:
-                  forecasts:
-                  - _links:
-                      transmission-facility:
-                        href: /reference-data/transmission-facilities/line2
-                        name: line2
-                    periods:
-                    - period-start: "2023-07-12T16:00:00-07:00"
-                      updated-time: "2023-07-12T13:05:43.044267100-07:00"
-                      values: 
-                      - type: normal
-                        value:
-                          mva: 160
-                      - type: emergency
-                        value:
-                          mva: 165
-                      - type: loadshed
-                        value:
-                          mva: 170
+              - transmission-facility-id: line2
+                periods:
+                - period-start: "2023-07-12T16:00:00-07:00"
+                  updated-time: "2023-07-12T13:05:43.044267100-07:00"
+                  values: 
+                  - type: normal
+                    value:
+                      mva: 160
+                  - type: emergency
+                    value:
+                      mva: 165
+                  - type: loadshed
+                    value:
+                      mva: 170
             application/vnd.trolie.forecast-limit-set-detailed.v1+json:
               schema:
                 $ref: '#/components/schemas/forecast-limit-set-detailed'
               example:
-                _links:
-                  self: 
-                    href: /limits/forecast-snapshot
-                total-count: 1
-                offset: 0
-                _embedded:
-                  forecasts:
-                  - _links:
-                      transmission-facility:
-                        href: /reference-data/transmission-facilities/line2
-                        name: line2
-                    periods:
-                    - _links:
-                        provenant-proposals:
-                        - href: /rating-proposals/forecasts/12345
-                        temporary-ratings:
-                        - href: /temporary-ratings/2d8c80e8-f533-4be9-85bf-f7f81eb73d67    
-                        limiting-segment:
-                          href: /reference-data/network-segments/segmentX
-                          name: segmentX    
-                      override-reason: Any reason entered by the operator for an override.
-                      additional-data:
-                        vendor-specific-data: {}                   
-                      period-start: "2023-07-12T16:00:00-07:00"
-                      updated-time: "2023-07-12T13:05:43.044267100-07:00"
-                      values: 
-                      - type: normal
-                        value:
-                          mva: 160
-                      - type: emergency
-                        value:
-                          mva: 165
-                      - type: loadshed
-                        value:
-                          mva: 170                          
+              - transmission-facility-id: line2
+                periods:
+                - period-start: "2023-07-12T16:00:00-07:00"
+                  updated-time: "2023-07-12T13:05:43.044267100-07:00"
+                  provenant-proposals:
+                  - c386503e-ae8f-46e7-8fcf-bdee30f4f56b
+                  temporary-ratings:
+                  - 2d8c80e8-f533-4be9-85bf-f7f81eb73d67    
+                  limiting-segment: segmentX    
+                  override-reason: Any reason entered by the operator for an override.
+                  additional-data:
+                    vendor-specific-data: {}                         
+                  values: 
+                  - type: normal
+                    value:
+                      mva: 160
+                  - type: emergency
+                    value:
+                      mva: 165
+                  - type: loadshed
+                    value:
+                      mva: 170                          
             application/json:
               schema:
                 $ref: '#/components/schemas/forecast-limit-set'
@@ -356,8 +322,6 @@ paths:
         - $ref: '#/components/parameters/period-start'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                  
       responses: *forecastSnapshotReadResponses
     head:
       operationId: getLimitsForecastHeadersByPeriod
@@ -384,8 +348,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                    
       tags:
         - Operating Snapshots
       responses:
@@ -397,64 +359,42 @@ paths:
               schema:
                 $ref: '#/components/schemas/realtime-limit-set'       
               example:
-                _links:
-                  self: 
-                    href: /limits/realtime-snapshot
-                total-count: 1
-                offset: 0
-                _embedded:
-                  limits:
-                  - _links:
-                      transmission-facility:
-                        href: /reference-data/transmission-facilities/line2
-                        name: line2
-                    updated-time: "2023-07-12T13:05:43.044267100-07:00"
-                    values: 
-                    - type: normal
-                      value:
-                        mva: 160
-                    - type: emergency
-                      value:
-                        mva: 165
-                    - type: loadshed
-                      value:
-                        mva: 170 
+              - transmission-facility-id: line2
+                updated-time: "2023-07-12T13:05:43.044267100-07:00"
+                values: 
+                - type: normal
+                  value:
+                    mva: 160
+                - type: emergency
+                  value:
+                    mva: 165
+                - type: loadshed
+                  value:
+                    mva: 170 
             application/vnd.trolie.realtime-limit-set-detailed.v1+json:
               schema:
                 $ref: '#/components/schemas/realtime-limit-set-detailed'       
-              example:
-                _links:
-                  self: 
-                    href: /limits/realtime-snapshot
-                total-count: 1
-                offset: 0
-                _embedded:
-                  limits:                   
-                  - _links:
-                      transmission-facility:
-                        href: /reference-data/transmission-facilities/line2
-                        name: line2
-                      provenant-proposals:
-                      - href: /rating-proposals/forecasts/12345
-                      temporary-ratings:
-                      - href: /temporary-ratings/2d8c80e8-f533-4be9-85bf-f7f81eb73d67    
-                      limiting-segment:
-                        href: /reference-data/network-segments/segmentX
-                        name: segmentX     
-                    override-reason: Any reason entered by the operator for an override.
-                    additional-data:
-                      vendor-specific-data: {}                                             
-                    updated-time: "2023-07-12T13:05:43.044267100-07:00"
-                    values: 
-                    - type: normal
-                      value:
-                        mva: 160
-                    - type: emergency
-                      value:
-                        mva: 165
-                    - type: loadshed
-                      value:
-                        mva: 170                         
+              example:               
+              - transmission-facility-id: line2
+                provenant-proposals:
+                - c386503e-ae8f-46e7-8fcf-bdee30f4f56b
+                temporary-ratings:
+                - 2d8c80e8-f533-4be9-85bf-f7f81eb73d67    
+                limiting-segment-id: segmentX     
+                override-reason: Any reason entered by the operator for an override.
+                additional-data:
+                  vendor-specific-data: {}                                             
+                updated-time: "2023-07-12T13:05:43.044267100-07:00"
+                values: 
+                - type: normal
+                  value:
+                    mva: 160
+                - type: emergency
+                  value:
+                    mva: 165
+                - type: loadshed
+                  value:
+                    mva: 170                         
             application/json:
               schema:
                 $ref: '#/components/schemas/realtime-limit-set'                      
@@ -498,8 +438,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'              
       responses:
         "200":
           description: OK
@@ -508,35 +446,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/seasonal-rating-snapshot'
               example:
-                _links:
-                  self: 
-                    href: /seasonal-ratings/snapshot
-                total-count: 1
-                offset: 0
-                _embedded:
-                  seasonal-ratings:
-                  - _links:
-                      provenant-proposals:
-                      - href: /rating-proposals/seasonal/12345
-                      transmission-facility:
-                        href: /reference-data/transmission-facilities/line2
-                        name: line2
-                    seasons:
-                    - _links:
-                        season:
-                          name: fall-2023
-                          href: /seasonal-ratings/season-instances/fall-2023
-                      effective-date: "2023-09-01T00:00:00-07:00"
-                      values: 
-                      - type: normal
-                        value:
-                          mva: 160
-                      - type: emergency
-                        value:
-                          mva: 165
-                      - type: loadshed
-                        value:
-                          mva: 170   
+              - transmission-facility-id: line2
+                seasons:
+                - season-instance: fall-2023
+                  effective-date: "2023-09-01T00:00:00-07:00"
+                  values: 
+                  - type: normal
+                    value:
+                      mva: 160
+                  - type: emergency
+                    value:
+                      mva: 165
+                  - type: loadshed
+                    value:
+                      mva: 170   
             application/json:
               schema:
                 $ref: '#/components/schemas/seasonal-rating-snapshot'                                       
@@ -559,9 +482,9 @@ paths:
         default: *commonDefaultErr
       security: *snapshotReadSecurity
     head:
-      operationId: getResourceRatingsSnapshotHeaders
+      operationId: getSeasonalRatingsSnapshotHeaders
       description: >
-        Use to obtain the headers that would be returned for `getResourceRatingsSnapshot`.
+        Use to obtain the headers that would be returned for `getSeasonalRatingsSnapshot`.
         Useful for cache invalidation.
       tags:
         - Seasonal Rating Snapshots
@@ -585,19 +508,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/season-instance-set'
               example:
-                _links:
-                  self: 
-                    href: /seasonal-ratings/season-instances
-                _embedded:
-                  seasons:
-                  - _links:
-                      self:
-                        href: /seasonal-ratings/season-instances/fall-2023
-                      season:
-                        href: /reference-data/seasons/fall
-                    id: fall-2023
-                    effective-time: "2023-09-1T00:00:00-07:00"
-                    active: true     
+              - season: fall
+                id: fall-2023
+                effective-time: "2023-09-10T00:00:00-07:00"
+                active: true     
             application/json:
               schema:
                 $ref: '#/components/schemas/season-instance-set'                                
@@ -645,11 +559,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/season-instance'
               example:
-                _links:
-                  self:
-                    href: /seasonal-ratings/season-instances/fall-2023
-                  season:
-                    href: /reference-data/seasons/fall
+                season: fall
                 id: fall-2023
                 effective-time: "2023-09-01T00:00:00-07:00"
                 active: true 
@@ -701,16 +611,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/forecast-rating-proposal'
               example:
-                _links:
-                  self:
-                    href: /rating-proposals/forecasts/UTILIXYX
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 ratings-provider: UTILITYX
                 ratings: 
-                - _links:
-                    segment:
-                      href: /reference-data/network-segments/segmentX 
-                  segment-id: segmentX
+                - segment-id: segmentX
                   periods:
                   - period-start: "2023-07-12T16:00:00-07:00"
                     status: pending
@@ -763,8 +667,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
       security: *forecastproposalReadSecurity
@@ -812,16 +714,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/forecast-rating-proposal'
               example:
-                _links:
-                  self:
-                    href: /rating-proposals/forecasts/UTILITYA
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 ratings-provider: UTILITYA
                 ratings: 
-                - _links:
-                    segment:
-                      href: /reference-data/network-segments/segmentX 
-                  segment-id: segmentX
+                - segment-id: segmentX
                   periods:
                   - period-start: "2023-07-12T16:00:00-07:00"
                     status: pending
@@ -893,8 +789,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                      
       responses: *ratingProposalsGetResponse
       security: *forecastproposalReadSecurity
     patch:
@@ -924,8 +818,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                    
       responses: 
         "200":
           description: OK
@@ -934,17 +826,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/missing-forecast-rating-set'
               example:
-                _links:
-                  self: 
-                    href: /rating-proposals/missing/forecasts
-                total-count: 1
-                offset: 0
-                _embedded:
-                  forecasts:
-                  - _links:
-                      segment:
-                        href: /reference-data/network-segments/segmentX
-                        name: segmentX
+                  - segment-id: segmentX
                     periods: 
                     - "2023-07-12T16:00:00-07:00"
             application/json:
@@ -980,8 +862,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
       security: *forecastproposalReadSecurity
@@ -1002,8 +882,6 @@ paths:
         - $ref: '#/components/parameters/ratings-provider'
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                    
       responses: 
         "200":
           description: OK
@@ -1012,19 +890,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/missing-forecast-rating-set'
               example:
-                _links:
-                  self: 
-                    href: /rating-proposals/missing/forecasts/providerA
-                total-count: 1
-                offset: 0
-                _embedded:
-                  forecasts:
-                  - _links:
-                      segment:
-                        href: /reference-data/network-segments/segmentX
-                        name: segmentX
-                    periods: 
-                    - "2023-07-12T16:00:00-07:00"
+              - segment-id: segmentX
+                periods: 
+                - "2023-07-12T16:00:00-07:00"
             application/json:
               schema:
                 $ref: '#/components/schemas/missing-forecast-rating-set'                    
@@ -1060,8 +928,6 @@ paths:
         - $ref: '#/components/parameters/ratings-provider'      
         - $ref: '#/components/parameters/offset-period-start'
         - $ref: '#/components/parameters/period-end'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
       security: *forecastproposalReadSecurity      
@@ -1090,20 +956,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/temporary-rating-set'
               example:
-                _links:
-                  self:
-                    href: /temporary-ratings
-                total-count: 1
-                offset: 0
-                _embedded:
-                  temporary-ratings:
-                  - _links:
-                      self: 
-                        href: /temporary-ratings/46f7212b-1633-4c30-ba71-c6e987b2ded7
-                      segment: 
-                        href: /reference-data/network-segments/segmentX
-                        name: segmentX
-                    id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
+                  - id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
                     segment-id: segmentX      
                     start-time: "2025-07-12T16:00:00-07:00"
                     end-time:  "2025-07-13T12:00:00-07:00"     
@@ -1157,8 +1010,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
       security: *temporaryRatingReadSecurity
@@ -1203,12 +1054,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/temporary-rating'
               example:
-                _links:
-                  self: 
-                    href: /temporary-ratings/46f7212b-1633-4c30-ba71-c6e987b2ded7
-                  segment: 
-                    href: /reference-data/network-segments/segmentX
-                    name: segmentX
                 id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
                 segment-id: segmentX      
                 start-time: "2025-07-12T16:00:00-07:00"
@@ -1286,12 +1131,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/temporary-rating'
               example:
-                _links:
-                  self: 
-                    href: /temporary-ratings/46f7212b-1633-4c30-ba71-c6e987b2ded7
-                  segment: 
-                    href: /reference-data/network-segments/segmentX
-                    name: segmentX
                 id: 46f7212b-1633-4c30-ba71-c6e987b2ded7
                 segment-id: segmentX      
                 start-time: "2025-07-12T16:00:00-07:00"
@@ -1422,8 +1261,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                    
       responses: 
         "200":
           description: OK
@@ -1432,24 +1269,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/realtime-rating-set'      
               example:
-                _links:
-                  self: 
-                    href: /rating-proposals/realtime
-                total-count: 1
-                offset: 0
-                _embedded:
-                  proposals:
-                  - _links:
-                      self:
-                        href: /rating-proposals/realtime/12345
-                    id: "12345"
+                  - id: "12345"
                     timestamp: "2023-07-12T15:05:43.044267100-07:00"
                     submitter: utilityA
                     ratings: 
-                    - _links:
-                        segment:
-                          href: /reference-data/network-segments/segmentX  
-                      segment-id: segmentX
+                    - segment-id: segmentX
                       status: pending
                       values:
                       - type: normal
@@ -1494,8 +1318,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
       security: *realtimeproposalReadSecurity
@@ -1539,17 +1361,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/realtime-rating-proposal'
               example:
-                _links:
-                  self:
-                    href: /rating-proposals/realtime/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
                 ratings: 
-                - _links:
-                    segment:
-                      href: /reference-data/network-segments/segmentX
-                  segment-id: segmentX
+                - segment-id: segmentX
                   status: accepted
                   values:
                   - type: normal
@@ -1603,17 +1419,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/realtime-rating-proposal'
               example:
-                _links:
-                  self:
-                    href: /rating-proposals/realtime/12345
                 id: "12345"
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 submitter: utilityA
                 ratings: 
-                - _links:
-                    segment:
-                      href: /reference-data/network-segments/segmentX
-                  segment-id: segmentX
+                - segment-id: segmentX
                   status: superseded
                   values:
                   - type: normal
@@ -1660,8 +1470,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                    
       responses: &seasonalProposalGetResponse
         "200":
           description: OK
@@ -1670,22 +1478,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/seasonal-rating-proposal'
               example:
-                _links:
-                  self:
-                    href: /rating-proposals/seasonal/UTILITYA
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 owner: UTILITYA
                 ratings: 
-                - _links:
-                    segment:
-                      href: /reference-data/network-segments/segmentX
-                      name: segmentX  
-                  segment-id: segmentX
+                - segment-id: segmentX
                   seasons:
-                  - _links:
-                      season:
-                        href: /reference-data/seasons/fall
-                    season-id: fall
+                  - season-id: fall
                     status: accepted
                     values:
                     - type: normal
@@ -1780,22 +1578,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/seasonal-rating-proposal'
               example:
-                _links:
-                  self:
-                    href: /rating-proposals/seasonal/UTILITYA
                 timestamp: "2023-07-12T15:05:43.044267100-07:00"
                 owner: UTILITYA
                 ratings: 
-                - _links:
-                    segment:
-                      href: /reference-data/network-segments/segmentX
-                      name: segmentX  
-                  segment-id: segmentX
+                - segment-id: segmentX
                   seasons:
-                  - _links:
-                      season:
-                        href: /reference-data/seasons/fall
-                    season-id: fall
+                  - season-id: fall
                     status: accepted
                     values:
                     - type: normal
@@ -1871,9 +1659,6 @@ paths:
         and the `ETag` of a previous `GET` response.
       tags:
         - Monitoring Sets
-      parameters:
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'                    
       responses: 
         "200":
           description: OK
@@ -1882,16 +1667,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/monitoring-set-list'
               example:
-                _links:
-                  self:
-                    href: /monitoring-sets
-                total-count: 1
-                offset: 0
-                _embedded:
-                  monitoring-sets: 
-                  - name: utilityA-and-neighbors
-                    href: /monitoring-sets/utilityA-and-neighbors
-                    
+                - utilityA-and-neighbors
+                - utilityB-and-neighbors    
             application/json:
               schema:
                 $ref: '#/components/schemas/monitoring-set-list'            
@@ -1923,9 +1700,6 @@ paths:
         `getMonitoringSets`. Useful for cache invalidation.
       tags:
         - Monitoring Sets
-      parameters:
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
 
       security: *readMonSetSecurity
@@ -1942,17 +1716,12 @@ paths:
             schema:
               $ref: '#/components/schemas/monitoring-set'  
             example:
-              _links:
-                self:
-                  href: /monitoring-sets/utilityA-and-neighbors 
               id: utilityA-and-neighbors   
               description: Utility A's owned lines, as well as surround neighbors. 
               transmission-facilities:
-              - name: line1
-                href: /reference-data/transmission-facilities/line1 
-              - href: /reference-data/transmission-facilities/line2  
-              - name: line3             
-                href: /reference-data/transmission-facilities/line3
+              - line1
+              - line2  
+              - line3             
           application/json:
             schema:
               $ref: '#/components/schemas/monitoring-set'
@@ -2006,18 +1775,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/monitoring-set'
               example:
-                _links:
-                  self:
-                    href: /monitoring-sets/utilityA-and-neighbors 
                 id: utilityA-and-neighbors   
                 description: Utility A's owned lines, as well as surround neighbors. 
                 transmission-facilities:
-                - name: line1
-                  href: /reference-data/transmission-facilities/line1 
-                - name: line2
-                  href: /reference-data/transmission-facilities/line2  
-                - name: line3             
-                  href: /reference-data/transmission-facilities/line3
+                - line1
+                - line2
+                - line3             
             application/json:
               schema:
                 $ref: '#/components/schemas/monitoring-set'                                  
@@ -2073,17 +1836,12 @@ paths:
             schema:
               $ref: '#/components/schemas/monitoring-set'    
             example:
-              _links:
-                self:
-                  href: /monitoring-sets/utilityA-and-neighbors 
               id: utilityA-and-neighbors   
               description: Utility A's owned lines, as well as surround neighbors. 
               transmission-facilities:
-              - name: line1
-                href: /reference-data/transmission-facilities/line1 
-              - href: /reference-data/transmission-facilities/line2  
-              - name: line3             
-                href: /reference-data/transmission-facilities/line3  
+              - line1
+              - line2  
+              - line3             
           application/json:
             schema:
               $ref: '#/components/schemas/monitoring-set'                                    
@@ -2117,9 +1875,6 @@ paths:
       description: Get network segments in the model with effective dates
       tags:
         - Reference Data    
-      parameters:
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'               
       responses:
         "200":
           description: OK
@@ -2128,16 +1883,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/network-segment-set'
               example:
-                _links:
-                  self: 
-                    href: /reference-data/network-segments
-                _embedded:
-                  segments:
-                  - _links:
-                      self:
-                        href: /reference-data/network-segments/Line4North
-                    id: Line4North
-                    effective-time: "2023-09-01T00:00:00-07:00"                
+              - id: Line4North
+                effective-time: "2023-09-01T00:00:00-07:00"                
             application/json:
               schema:
                 $ref: '#/components/schemas/network-segment-set'                                      
@@ -2166,9 +1913,6 @@ paths:
       description: >
         Use to obtain the headers that would be returned for `getNetworkSegments`.
         Useful for cache invalidation.
-      parameters:
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'            
       tags:
         - Reference Data   
       responses: *headResponses
@@ -2190,9 +1934,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/network-segment'
               example:
-                _links:
-                  self:
-                    href: /reference-data/network-segments/Line4North
                 id: Line4North
                 effective-time: "2023-09-01T00:00:00-07:00"  
             application/json:
@@ -2223,9 +1964,6 @@ paths:
       description: Get transmission facilities in the model with effective dates
       tags:
         - Reference Data    
-      parameters:
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'               
       responses:
         "200":
           description: OK
@@ -2234,23 +1972,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/transmission-facility-set'
               example:
-                _links:
-                  self: 
-                    href: /reference-data/transmission-facilities
-                _embedded:
-                  transmission-facilities:
-                  - _links:
-                      self:
-                        href: /reference-data/transmission-facilities/Line4
-                    id: Line4
-                    effective-time: "2023-09-01T00:00:00-07:00"
-                    _embedded:
-                      segments:
-                      - _links:
-                          self:
-                            href: /reference-data/transmission-facilities/Line4North
-                        id: Line4North
-                        effective-time: "2023-09-01T00:00:00-07:00"   
+              - id: Line4
+                effective-time: "2023-09-01T00:00:00-07:00"
+                segments:
+                - id: Line4North
+                  effective-time: "2023-09-01T00:00:00-07:00"   
             application/json:
               schema:
                 $ref: '#/components/schemas/transmission-facility-set'                                       
@@ -2277,9 +2003,6 @@ paths:
       description: >
         Use to obtain the headers that would be returned for `getNetworkTransmissionFacilities`.
         Useful for cache invalidation.
-      parameters:
-        - $ref: '#/components/parameters/max-records'
-        - $ref: '#/components/parameters/record-offset'            
       tags:
         - Reference Data   
       responses: *headResponses
@@ -2301,18 +2024,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/transmission-facility'
               example:
-                _links:
-                  self:
-                    href: /reference-data/transmission-facilities/Line4
                 id: Line4
                 effective-time: "2023-09-01T00:00:00-07:00"
-                _embedded:
-                  segments:
-                  - _links:
-                      self:
-                        href: /reference-data/network-segments/Line4North
-                    id: Line4North
-                    effective-time: "2023-09-01T00:00:00-07:00"   
+                segments:
+                - id: Line4North
+                  effective-time: "2023-09-01T00:00:00-07:00"   
             application/json:
               schema:
                 $ref: '#/components/schemas/transmission-facility'                                  
@@ -2355,15 +2071,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/season-set'
               example:
-                _links:
-                  self: 
-                    href: /reference-data/seasons
-                _embedded:
-                  regions:
-                  - _links:
-                      self:
-                        href: /reference-data/seasons/fall
-                    id: fall
+                  - id: fall
                     calendar-season: true
             application/json:
               schema:
@@ -2405,9 +2113,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/season'
               example:
-                _links:
-                  self:
-                    href: /reference-data/seasons/fall
                 id: fall
                 calendar-season: true     
             application/json:
@@ -2451,19 +2156,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/limit-type-set'
               example:
-                _links:
-                  self:
-                    href: /reference-data/limit-types
-                _embedded:
-                  types:
-                  - id: normal
-                    description: Limit for normal operating conditions
-                  - id: lte
-                    description: Long-term Emergency
-                  - id: ste
-                    description: Short-term Emergency
-                  - id: dal
-                    description: Drastic action Limit
+              - id: normal
+                description: Limit for normal operating conditions
+              - id: lte
+                description: Long-term Emergency
+              - id: ste
+                description: Short-term Emergency
+              - id: dal
+                description: Drastic action Limit
             application/json:
               schema:
                 $ref: '#/components/schemas/limit-type-set'                                      
@@ -2504,17 +2204,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/naming-scheme-set'
               example:
-                _links:
-                  self:
-                    href: /reference-data/naming-schemes
-                _embedded:
-                  naming-schemes:
-                  - id: CIM-MRIDs
-                    description: CIM Master resource Ids
-                  - id: EMS
-                    description: Ids of the objects in the EMS system
-                  - id: Asset-Reg
-                    description: Ids from the asset registration system 
+              - id: CIM-MRIDs
+                description: CIM Master resource Ids
+              - id: EMS
+                description: Ids of the objects in the EMS system
+              - id: Asset-Reg
+                description: Ids from the asset registration system 
             application/json:
               schema:
                 $ref: '#/components/schemas/naming-scheme-set'                                
@@ -2575,26 +2270,6 @@ components:
       schema:
         $ref: '#/components/schemas/generic-identifier'  
 
-    max-records:
-      name: max-records
-      description: >
-        Optionally specify a maximum number of records to return in a query operation.  Allows for paged query results.  
-      in: query
-      required: false
-      schema: 
-        type: integer
-        format: uint16
-        example: 1000
-    record-offset:
-      name: record-offset
-      description: >
-        Specify an offset for the records returned in a query operation.  Along with max-records, allows for paged query results.  
-      in: query
-      required: false
-      schema:
-        type: integer
-        example: 2000
-
     offset-period-start:
       name: offset-period-start
       description: >
@@ -2647,70 +2322,7 @@ components:
         $ref: '#/components/schemas/generic-identifier'               
 
   schemas:
-    hal-link:
-      type: object
-      description: Link object in HAL, using a subset of what is defined in https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08
-      properties:
-        href:
-          description: Path to a resource.  May be absolute, or if starting with / implies that the path is relative to the service root.  
-          type: string
-          example: /path/to/resource/id12345
-        templated:
-          description: True if the link is templated with one of the properties.  Missing value implies false.    
-          type: boolean
-          example: true
-        type:
-          description: The media type of the link.  This is optional.  
-          type: string
-          example: application/vnd.trolie.realtime-limit-set.v1+json
-        name: 
-          type: string
-        deprecation:
-          description: True if the link is deprecated.  Missing vlaue implies false.  
-          type: boolean
-          example: true
-      required:
-        - href
-    
-    hal-links-block:
-      type: object 
-      description: Common components of a HAL links block, as described in https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08
-      properties:
-        self: 
-          $ref: '#/components/schemas/hal-link'
-        curies: 
-          type: array
-          items:
-            $ref: '#/components/schemas/hal-link'
-
-    paged-links-block:
-      allOf:
-      - $ref: '#/components/schemas/hal-links-block'
-      - type: object 
-        description: Extends the HAL Links block with some additional links for paging.  
-        properties:               
-          next: 
-            $ref: '#/components/schemas/hal-link'
-          previous: 
-            $ref: '#/components/schemas/hal-link'  
-
-    paged-resource:
-      type: object
-      description: |
-        Common resource definition for paged resources.  Assumes the resource content is included as an
-        array in an _embedded block, and a _links section is also declared separately containing any useful references. 
-      properties:
-        _links: 
-          $ref: '#/components/schemas/paged-links-block'      
-        total-count:
-          description: the total count returned by the query.  
-          type: integer
-          format: uint16
-        offset:
-          description: the offset from 0 if this query is beyond the first page.  
-          type: integer 
-          format: uint16
-    
+ 
     limit-value-set: 
       type: array
       description: |
@@ -2786,24 +2398,20 @@ components:
       type: object
       description: Given a limit value, a set of data defining the provenance of that limit.  
       properties:
-        _links: 
-          type: object
-          properties:
-            provenant-proposals:
-              description: |
-                Set of links to proposals that affect this limit.  In the case of forecast proposals, this should ideally be a link 
-                to the relevantly filtered `getLimitsForecastByPeriod` resource filtered to the relevant period.  
-              type: array
-              items: 
-                $ref: "#/components/schemas/hal-link"   
-            temporary-ratings:
-              description: |
-                Set of links to temporary raings that affect this limit.  
-              type: array
-              items: 
-                $ref: "#/components/schemas/hal-link"                    
-            limiting-segment:
-              $ref: "#/components/schemas/hal-link"    
+        provenant-proposals:
+          description: |
+            Set of IDs of proposals that affect this limit.  
+          type: array
+          items: 
+            $ref: "#/components/schemas/generic-identifier"   
+        temporary-ratings:
+          description: |
+            Set of IDs temporary raings that affect this limit.  
+          type: array
+          items: 
+            $ref: "#/components/schemas/generic-identifier"                    
+        limiting-segment:
+            $ref: "#/components/schemas/generic-identifier"    
         override-reason:
           description: | 
             If provided, indicates that this limit was overridden for some reason, the reason itself.  
@@ -2817,43 +2425,24 @@ components:
 
 
     realtime-limit-set:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              limits:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/realtime-limit-item'
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/realtime-limit-item'
 
     realtime-limit-set-detailed:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              limits:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/realtime-limit-item-detailed'                  
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/realtime-limit-item-detailed'             
 
     realtime-limit-item:
       type: object
       properties:
-        _links: 
-          type: object
-          properties: 
-            transmission-facility: 
-              $ref: '#/components/schemas/hal-link'      
+        transmission-facility-id: 
+          $ref: '#/components/schemas/generic-identifier'      
         updated-time:
           $ref: '#/components/schemas/timestamp'
         values:
@@ -2867,47 +2456,28 @@ components:
 
     forecast-limit-set:
       description: |
-        Simple forecast 
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              forecasts:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/forecast-limit-item'
+        Set of forecast limits
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/forecast-limit-item'
 
     forecast-limit-set-detailed:
       description: |
         Forecast including audit trail information.  
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              forecasts:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/forecast-limit-item-detailed'                  
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/forecast-limit-item-detailed'                  
 
     forecast-limit-item:
       type: object 
       additionalProperties: false
       properties:
-        _links: 
-          type: object
-          properties:    
-            transmission-facility: 
-              $ref: '#/components/schemas/hal-link'  
+        transmission-facility-id: 
+          $ref: '#/components/schemas/generic-identifier'  
         periods:
           type: array
           items:
@@ -2917,11 +2487,8 @@ components:
       type: object 
       additionalProperties: false
       properties:
-        _links: 
-          type: object
-          properties:  
-            transmission-facility: 
-              $ref: '#/components/schemas/hal-link'  
+        transmission-facility-id: 
+          $ref: '#/components/schemas/generic-identifier'  
         periods:
           type: array
           items:
@@ -2943,33 +2510,18 @@ components:
       - $ref: '#/components/schemas/limit-audit-trail'         
         
     seasonal-rating-snapshot: 
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              seasonal-ratings:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/seasonal-rating-snapshot-item'     
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/seasonal-rating-snapshot-item'     
 
     seasonal-rating-snapshot-item:
       type: object
       additionalProperties: false
-      properties:
-        _links: 
-          type: object
-          properties:
-            provenant-proposals:
-              type: array
-              items: 
-                $ref: "#/components/schemas/hal-link"      
-            transmission-facility: 
-              $ref: '#/components/schemas/hal-link'      
+      properties:    
+        transmission-facility-id: 
+          $ref: '#/components/schemas/generic-identifier'      
         seasons:
           type: array 
           items:
@@ -2981,11 +2533,8 @@ components:
       type: object
       additionalProperties: false
       properties:
-        _links:
-          type: object
-          properties:
-            season-instance: 
-               $ref: '#/components/schemas/hal-link'
+        season-instance: 
+            $ref: '#/components/schemas/generic-identifier'
         effective-date:
           $ref: '#/components/schemas/period-start'
         values:
@@ -2994,32 +2543,18 @@ components:
           $ref: '#/components/schemas/conditional-value-set'         
 
     season-instance-set: 
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        _embedded:
-          type: object
-          properties:
-            forecasts:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                $ref: '#/components/schemas/season-instance'     
+      type: array
+      minItems: 0
+      maxItems: 100 
+      items:
+        $ref: '#/components/schemas/season-instance'     
 
     season-instance:
       type: object
       additionalProperties: false
       properties:
-        _links:
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:
-              season: 
-                $ref: '#/components/schemas/hal-link'
+        season: 
+          $ref: '#/components/schemas/generic-identifier'
         id: 
           $ref: '#/components/schemas/generic-identifier'
         effective-time: 
@@ -3028,7 +2563,6 @@ components:
           description: Set to true if this season is currently active
           type: boolean
       required:
-      - _links
       - id
       - active
 
@@ -3042,15 +2576,7 @@ components:
         * A unique, system generated identifier.  
         * The time the proposal was recieved.  
         * The ratings provider that created the proposal.  
-        * If applicable, a link to another proposal that supercedes this proposal, for example on jointly-owned equipment.  
       properties:
-        _links: 
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:   
-              superseded-by:  
-                $ref: '#/components/schemas/hal-link'
         id: 
           $ref: '#/components/schemas/generic-identifier'   
         timestamp:
@@ -3069,13 +2595,6 @@ components:
         * The ratings provider that owns the proposal.  For mutable proposals such as those for forecasts or seasonal 
           ratings, the ID of the owning ratings provider is the ID of the proposal itself.  
       properties:
-        _links: 
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:   
-              superseded-by:  
-                $ref: '#/components/schemas/hal-link'
         last-updated:
           $ref: '#/components/schemas/timestamp' 
         ratings-provider:
@@ -3116,12 +2635,7 @@ components:
     forecast-proposal-for-segment:
       type: object
       additionalProperties: false
-      properties:
-        _links: 
-          type: object
-          properties:   
-            segment: 
-              $ref: '#/components/schemas/hal-link'    
+      properties:    
         segment-id:
           $ref: '#/components/schemas/generic-identifier'
         periods:  
@@ -3156,49 +2670,30 @@ components:
           $ref: '#/components/schemas/limit-value-set'     
 
     missing-forecast-rating-set:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              forecasts:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/missing-forecast-rating-for-segment'
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/missing-forecast-rating-for-segment'
 
           
     missing-forecast-rating-for-segment:
       type: object
       additionalProperties: false
       properties:
-        _links: 
-          type: object
-          properties:   
-            segment: 
-              $ref: '#/components/schemas/hal-link'    
+        segment-id: 
+          $ref: '#/components/schemas/generic-identifier'    
         periods:  
           type: array
           items:
             $ref: '#/components/schemas/period-start'           
 
     realtime-rating-set:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              proposals:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/realtime-rating-proposal'
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/realtime-rating-proposal'
 
     realtime-rating-proposal:
       allOf:
@@ -3217,11 +2712,6 @@ components:
       description: |
         Real-time ratings data for a segment.  Includes status of the proposal relative to this data, as well as rating values.  
       properties: 
-        _links:
-          type: object
-          properties:
-            segment:
-              $ref: '#/components/schemas/hal-link'
         segment-id: 
           $ref: '#/components/schemas/generic-identifier'
         status:
@@ -3244,11 +2734,6 @@ components:
       type: object
       additionalProperties: false
       properties:
-        _links: 
-          type: object
-          properties:   
-            segment: 
-              $ref: '#/components/schemas/hal-link' 
         segment-id: 
           $ref: '#/components/schemas/generic-identifier'   
         seasons:  
@@ -3263,11 +2748,6 @@ components:
         Also includes a set of values for rating altering conditions on the segment, should they apply.  
       additionalProperties: false
       properties: 
-        _links: 
-          type: object
-          properties:   
-            season: 
-              $ref: '#/components/schemas/hal-link' 
         season-id: 
           $ref: '#/components/schemas/generic-identifier' 
         status:
@@ -3279,20 +2759,12 @@ components:
 
     monitoring-set-list:
       description: |
-        Paged list of monitoring set links.  Note that monitoring sets themselves are not embedded in the list as they are potentially extremely large objects.  
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              monitoring-sets:
-                type: array
-                minItems: 0
-                maxItems: 2000 
-                items:
-                  $ref: '#/components/schemas/hal-link'
+        List of monitoring set IDs
+      type: array
+      minItems: 0
+      maxItems: 2000 
+      items:
+        $ref: '#/components/schemas/generic-identifier'
 
     monitoring-set:
       description: |
@@ -3302,8 +2774,6 @@ components:
       type: object
       additionalProperties: false
       properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
         id:
           $ref: '#/components/schemas/generic-identifier'   
         description:
@@ -3313,7 +2783,7 @@ components:
           minItems: 0
           maxItems: 50000
           items:
-            $ref: '#/components/schemas/hal-link'         
+            $ref: '#/components/schemas/generic-identifier'         
      
     network-component-name:
       type: object
@@ -3335,13 +2805,6 @@ components:
         is either an AAR Exception or temporary seasonal rating.  
 
       properties:
-        _links:
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:
-              segment: 
-                $ref: '#/components/schemas/hal-link'
         id:
           $ref: '#/components/schemas/generic-identifier'  
         segment-id: 
@@ -3369,36 +2832,20 @@ components:
           type: string
           
     temporary-rating-set:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              temporary-ratings:
-                type: array
-                minItems: 0
-                maxItems: 1000 
-                items:
-                  $ref: '#/components/schemas/temporary-rating'
+      type: array
+      minItems: 0
+      maxItems: 1000 
+      items:
+        $ref: '#/components/schemas/temporary-rating'
 
 
 
     transmission-facility-set:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              forecasts:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/transmission-facility'
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/transmission-facility'
 
     transmission-facility:
       type: object
@@ -3407,9 +2854,6 @@ components:
         this is generally lines, but could also include equipment such as transformers.  Transmission facilities generally are composed of segments.  
       additionalProperties: false
       properties:
-        _links:
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
         id:
           $ref: '#/components/schemas/generic-identifier'
         name:
@@ -3422,30 +2866,19 @@ components:
           maxItems: 100
           items: 
             $ref: '#/components/schemas/network-component-name'
-        _embedded:
-          type: object
-          properties:
-            segments:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                $ref: '#/components/schemas/network-segment'    
+        segments:
+          type: array
+          minItems: 0
+          maxItems: 100 
+          items:
+            $ref: '#/components/schemas/network-segment'    
 
     network-segment-set:
-      allOf:
-      - $ref: '#/components/schemas/paged-resource'
-      - type: object
-        properties:
-          _embedded:
-            type: object
-            properties:
-              forecasts:
-                type: array
-                minItems: 0
-                maxItems: 50000 
-                items:
-                  $ref: '#/components/schemas/network-segment'
+      type: array
+      minItems: 0
+      maxItems: 50000 
+      items:
+        $ref: '#/components/schemas/network-segment'
 
     network-segment:
       type: object
@@ -3455,13 +2888,8 @@ components:
         can have a dynamic rating and is potentially limiting to some transmission facility.  
       additionalProperties: false
       properties:
-        _links:
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:
-              transmission-facility: 
-                $ref: '#/components/schemas/hal-link'
+        transmission-facility-id: 
+          $ref: '#/components/schemas/generic-identifier'
         id:
           $ref: '#/components/schemas/generic-identifier'
         name:
@@ -3487,20 +2915,11 @@ components:
 
 
     season-set:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        _embedded:
-          type: object
-          properties:
-            forecasts:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                $ref: '#/components/schemas/season'  
+      type: array
+      minItems: 0
+      maxItems: 100 
+      items:
+        $ref: '#/components/schemas/season'  
 
     season:
       type: object
@@ -3510,8 +2929,6 @@ components:
         which tie the season to a specific calendar time.  
       additionalProperties: false
       properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
         id:
           $ref: '#/components/schemas/generic-identifier'          
         calendar-season:
@@ -3520,50 +2937,32 @@ components:
           example: true
 
     limit-type-set:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        _embedded:
-          type: object
-          properties:
-            types:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                type: object
-                additionalProperties: false
-                properties:
-                  id: 
-                    $ref: '#/components/schemas/generic-identifier'
-                  description:
-                    type: string  
-                    example: Extreme cold winter day, -100 degrees fahrenheit
+      type: array
+      minItems: 0
+      maxItems: 100 
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          id: 
+            $ref: '#/components/schemas/generic-identifier'
+          description:
+            type: string  
+            example: Extreme cold winter day, -100 degrees fahrenheit
 
     naming-scheme-set:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        _embedded:
-          type: object
-          properties:
-            naming-schemes:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                type: object
-                additionalProperties: false
-                properties:
-                  id: 
-                    $ref: '#/components/schemas/generic-identifier'
-                  description:
-                    type: string   
-                    example: Asset registration system identifiers                                            
+      type: array
+      minItems: 0
+      maxItems: 100 
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          id: 
+            $ref: '#/components/schemas/generic-identifier'
+          description:
+            type: string   
+            example: Asset registration system identifiers                                            
 
     validation-messages:
       type: array
