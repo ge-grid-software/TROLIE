@@ -173,8 +173,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: &forecastSnapshotReadResponses
@@ -312,8 +310,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
       responses: &headResponses
         "200": 
           description: OK
@@ -360,8 +356,6 @@ paths:
         - $ref: '#/components/parameters/period-start'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                  
       responses: *forecastSnapshotReadResponses
@@ -390,8 +384,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       tags:
@@ -494,8 +486,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
       responses: *headResponses
       security: *snapshotReadSecurity
   
@@ -508,8 +498,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'              
       responses:
@@ -580,8 +568,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/facility-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
       responses: *headResponses
       security: *snapshotReadSecurity
 
@@ -707,8 +693,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
       responses: &ratingProposalsGetResponse
         "200":
           description: OK
@@ -779,8 +763,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -911,8 +893,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                      
       responses: *ratingProposalsGetResponse
@@ -1102,8 +1082,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'        
       responses: 
         "200":
           description: OK
@@ -1179,8 +1157,6 @@ paths:
         - $ref: '#/components/parameters/period-end'
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -1446,7 +1422,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'  
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: 
@@ -1519,8 +1494,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'        
       responses: *headResponses
@@ -1687,8 +1660,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'             
         - $ref: '#/components/parameters/max-records'
         - $ref: '#/components/parameters/record-offset'                    
       responses: &seasonalProposalGetResponse
@@ -1762,8 +1733,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'     
       responses: *headResponses
 
       security: *seasonalproposalReadSecurity
@@ -1877,8 +1846,6 @@ paths:
         - $ref: '#/components/parameters/ratings-provider'   
         - $ref: '#/components/parameters/monitoring-set-filter'
         - $ref: '#/components/parameters/segment-filter'
-        - $ref: '#/components/parameters/geographical-region-filter'
-        - $ref: '#/components/parameters/subgeographical-region-filter'     
       responses: *seasonalProposalGetResponse
       security: *seasonalproposalReadSecurity
     patch:
@@ -2142,240 +2109,7 @@ paths:
         "413": *common413        
         "429": *common429
         default: *commonDefaultErr   
-      security: *writeMonSetSecurity          
-
-  /reference-data/geographical-regions:
-    get:
-      operationId: getGeographicalRegions
-      description: >
-        Obtain Geographical Regions referenced in TROLIE.  
-
-        Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
-        and the `ETag` of a previous `GET` response.
-      tags:
-        - Reference Data             
-      responses: 
-        "200":
-          description: OK
-          content:
-            application/vnd.trolie.geographical-region-set.v1+json:
-              schema:
-                $ref: '#/components/schemas/geographical-region-set'
-              example:
-                _links:
-                  self: 
-                    href: /reference-data/geographical-regions
-                _embedded:
-                  regions:
-                  - _links:
-                      self:
-                        href: /reference-data/geographical-regions/5678
-                    id: "5678"
-                    name: East
-                    effective-time: "2023-09-1T00:00:00-07:00"
-                    _embedded:
-                      sub-regions:
-                      - _links:
-                          self:
-                            href: /reference-data/sub-geographical-regions/1234
-                        id: "1234"
-                        name: Nebraska
-                        effective-time: "2023-09-1T00:00:00-07:00"
-            application/json:
-              schema:
-                $ref: '#/components/schemas/geographical-region-set'                    
-
-          headers:
-            X-Rate-Limit-Limit:
-              $ref: '#/components/headers/X-Rate-Limit-Limit'
-            X-Rate-Limit-Remaining:
-              $ref: '#/components/headers/X-Rate-Limit-Remaining'
-            X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'           
-            ETag:
-              $ref: '#/components/headers/ETag'
-        "304": *common304
-        "400": *query400
-        "401": *common401
-        "403": *common403
-        "404": *common404          
-        "406": *common406
-        "429": *common429
-        default: *commonDefaultErr
-      security: &refReadSecurity
-        - oauth2-primary-flow:
-          - "read:reference-data"       
-    head:
-      operationId: getGeographicalRegionsHeaders
-      description: >
-        Use to obtain the headers that would be returned for 
-        `getGeographicalRegions`. Useful for cache invalidation.
-      tags:
-        - Reference Data 
-      responses: *headResponses
-
-      security: *refReadSecurity
-
-  /reference-data/geographical-regions/{id}:
-    get:
-      operationId: getGeographicalRegion
-      description: >
-        Obtain a specific Geographical region by Id.  
-      tags:
-        - Reference Data
-      parameters:
-        - $ref: '#/components/parameters/id'                    
-      responses: 
-        "200":
-          description: OK
-          content:
-            application/vnd.trolie.geographical-region.v1+json:
-              schema:
-                $ref: '#/components/schemas/geographical-region'
-              example:
-                _links:
-                  self:
-                    href: /reference-data/geographical-regions/5678
-                id: "5678"
-                name: East
-                effective-time: "2023-09-01T00:00:00-07:00"
-                _embedded:
-                  sub-regions:
-                  - _links:
-                      self:
-                        href: /reference-data/sub-geographical-regions/1234
-                    id: "1234"
-                    name: Nebraska
-                    effective-time: "2023-09-01T00:00:00-07:00" 
-            application/json:
-              schema:
-                $ref: '#/components/schemas/geographical-region'                                 
-          headers:
-            X-Rate-Limit-Limit:
-              $ref: '#/components/headers/X-Rate-Limit-Limit'
-            X-Rate-Limit-Remaining:
-              $ref: '#/components/headers/X-Rate-Limit-Remaining'
-            X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'      
-            ETag:
-              $ref: '#/components/headers/ETag'
-        "304": *common304
-        "400": *query400
-        "401": *common401
-        "403": *common403
-        "404": *common404          
-        "406": *common406
-        "429": *common429
-        default: *commonDefaultErr   
-      security: *refReadSecurity   
-
-  /reference-data/sub-geographical-regions:
-    get:
-      operationId: getSubGeographicalRegions
-      description: >
-        Obtain SubGeographical Regions referenced in TROLIE.  
-
-        Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
-        and the `ETag` of a previous `GET` response.
-      tags:
-        - Reference Data             
-      responses: 
-        "200":
-          description: OK
-          content:
-            application/vnd.trolie.sub-geographical-region-set.v1+json:
-              schema:
-                $ref: '#/components/schemas/sub-geographical-region-set'
-              example:
-                _links:
-                  self: 
-                    href: /reference-data/sub-geographical-regions
-                _embedded:
-                  regions:
-                  - _links:
-                      self:
-                        href: /reference-data/sub-geographical-regions/5678
-                    id: "5678"
-                    name: Maine
-                    effective-time: "2023-09-01T00:00:00-07:00"             
-            application/json:
-              schema:
-                $ref: '#/components/schemas/sub-geographical-region-set'
- 
-          headers:
-            X-Rate-Limit-Limit:
-              $ref: '#/components/headers/X-Rate-Limit-Limit'
-            X-Rate-Limit-Remaining:
-              $ref: '#/components/headers/X-Rate-Limit-Remaining'
-            X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'           
-            ETag:
-              $ref: '#/components/headers/ETag'
-        "304": *common304
-        "400": *query400
-        "401": *common401
-        "403": *common403
-        "404": *common404          
-        "406": *common406
-        "429": *common429
-        default: *commonDefaultErr
-      security: *refReadSecurity
-   
-    head:
-      operationId: getSubGeographicalRegionsHeaders
-      description: >
-        Use to obtain the headers that would be returned for 
-        `getSubGeographicalRegions`. Useful for cache invalidation.
-      tags:
-        - Reference Data 
-      responses: *headResponses
-
-      security: *refReadSecurity
-
-  /reference-data/sub-geographical-regions/{id}:
-    get:
-      operationId: getSubGeographicalRegion
-      description: >
-        Obtain a specific SubGeographical region by Id.  
-      tags:
-        - Reference Data
-      parameters:
-        - $ref: '#/components/parameters/id'              
-      responses: 
-        "200":
-          description: OK
-          content:
-            application/vnd.trolie.sub-geographical-region.v1+json:
-              schema:
-                $ref: '#/components/schemas/sub-geographical-region'
-              example:
-                _links:
-                  self:
-                    href: /reference-data/sub-geographical-regions/5678
-                id: "5678"
-                name: Maine
-                effective-time: "2023-09-01T00:00:00-07:00"     
-            application/json:
-              schema:
-                $ref: '#/components/schemas/sub-geographical-region'                              
-          headers:
-            X-Rate-Limit-Limit:
-              $ref: '#/components/headers/X-Rate-Limit-Limit'
-            X-Rate-Limit-Remaining:
-              $ref: '#/components/headers/X-Rate-Limit-Remaining'
-            X-Rate-Limit-Reset:
-              $ref: '#/components/headers/X-Rate-Limit-Reset'      
-            ETag:
-              $ref: '#/components/headers/ETag'
-        "304": *common304
-        "400": *query400
-        "401": *common401
-        "403": *common403
-        "404": *common404  
-        "406": *common406
-        "429": *common429
-        default: *commonDefaultErr   
-      security: *refReadSecurity       
+      security: *writeMonSetSecurity             
 
   /reference-data/network-segments:
     get:
@@ -2424,7 +2158,9 @@ paths:
         "406": *common406
         "429": *common429
         default: *commonDefaultErr
-      security: *refReadSecurity
+      security: &refReadSecurity
+        - oauth2-primary-flow:
+          - "read:reference-data"  
     head:
       operationId: getNetworkSegmentsHeaders
       description: >
@@ -2908,24 +2644,7 @@ components:
       in: query
       required: false
       schema:
-        $ref: '#/components/schemas/generic-identifier'     
-    geographical-region-filter:
-      name: geographical-region
-      description: >
-        Only return limits or ratings for facilities within this `GeographicalRegion``.    
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/generic-identifier'    
-    subgeographical-region-filter:
-      name: subgeographical-region
-      description: >
-        Only return limits or ratings for facilities within this `SubGeographicalRegion`.    
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/generic-identifier'                   
-
+        $ref: '#/components/schemas/generic-identifier'               
 
   schemas:
     hal-link:
@@ -3594,80 +3313,7 @@ components:
           minItems: 0
           maxItems: 50000
           items:
-            $ref: '#/components/schemas/hal-link'
-             
-
-    geographical-region-set:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        _embedded:
-          type: object
-          properties:
-            forecasts:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                $ref: '#/components/schemas/geographical-region'
-
-    geographical-region:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        id:
-          $ref: '#/components/schemas/generic-identifier'
-        name:
-          $ref: '#/components/schemas/generic-identifier'          
-        effective-time: 
-          $ref: '#/components/schemas/period-start'
-        _embedded:
-          type: object
-          properties:
-            sub-regions:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                $ref: '#/components/schemas/sub-geographical-region'        
-
-    sub-geographical-region-set:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          $ref: '#/components/schemas/hal-links-block'
-        _embedded:
-          type: object
-          properties:
-            forecasts:
-              type: array
-              minItems: 0
-              maxItems: 100 
-              items:
-                $ref: '#/components/schemas/sub-geographical-region'
-
-    sub-geographical-region:
-      type: object
-      additionalProperties: false
-      properties:
-        _links:
-          allOf:
-          - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:
-              geographical-region:
-                $ref: '#/components/schemas/hal-link'
-        id:
-          $ref: '#/components/schemas/generic-identifier'
-        name:
-          $ref: '#/components/schemas/generic-identifier'          
-        effective-time: 
-          $ref: '#/components/schemas/period-start'            
+            $ref: '#/components/schemas/hal-link'         
      
     network-component-name:
       type: object
@@ -3764,10 +3410,6 @@ components:
         _links:
           allOf:
           - $ref: '#/components/schemas/hal-links-block'
-          - type: object
-            properties:
-              sub-geographical-region: 
-                $ref: '#/components/schemas/hal-link'
         id:
           $ref: '#/components/schemas/generic-identifier'
         name:
