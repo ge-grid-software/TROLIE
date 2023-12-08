@@ -162,9 +162,9 @@ paths:
         Clients SHOULD perform Conditional `GET` using the `If-None-Match` header
         and the `ETag` of a previous `GET` response.
         This operation uses media types to control verbosity of the data fetched.  
-        The default media type (application/vnd.trolie.forecast-limit-set.v1+json) 
+        The default media type (application/vnd.trolie.forecast-limit-set-slim.v1+json) 
         simply includes the rating data.  For applications that need it, the media type
-        application/vnd.trolie.forecast-limit-with-audit-trail-set.v1+json may be requested, 
+        application/vnd.trolie.forecast-limit-set-detailed.v1+json may be requested, 
         which also references the source proposals used to generate the snapshot, as well as 
         reporting data from the ratings clearing process.  
       tags:
@@ -2700,7 +2700,7 @@ components:
           minimum: 0
           maximum: 1        
                                
-    limit-audit-trail: 
+    limit-provenance: 
       type: object
       description: Given a limit value, a set of data defining the provenance of that limit.  
       properties:
@@ -2725,7 +2725,7 @@ components:
           type: string  
         additional-data:
           description: |
-            Implementors may use this object to provide freeform extensions with additional audit data to be included with the limit.  
+            Implementors may use this object to provide freeform extensions with additional traceability / provenance data to be included with the limit.  
             Schema of this object is out of scope of the TROLIE specification.  
           type: object
 
@@ -2757,7 +2757,7 @@ components:
     realtime-limit-item-detailed:
       allOf:
       - $ref: '#/components/schemas/realtime-limit-item' 
-      - $ref: '#/components/schemas/limit-audit-trail'  
+      - $ref: '#/components/schemas/limit-provenance'  
 
 
     forecast-limit-set:
@@ -2771,7 +2771,7 @@ components:
 
     forecast-limit-set-detailed:
       description: |
-        Forecast including audit trail information.  
+        Forecast including provenance information.  
       type: array
       minItems: 0
       maxItems: 50000 
@@ -2813,7 +2813,7 @@ components:
     forecast-limit-period-detailed:
       allOf:
       - $ref: '#/components/schemas/forecast-limit-period'   
-      - $ref: '#/components/schemas/limit-audit-trail'         
+      - $ref: '#/components/schemas/limit-provenance'         
         
     seasonal-rating-snapshot: 
       type: array
