@@ -16,7 +16,7 @@ jobs:
         with:
           # Upload results to Github Code Scanning
           upload-to-code-scanning: true
-          log-level: info
+          log-level: debug
           sarif-report: 42Crunch_AuditReport_${{ github.run_id }}.SARIF
       - name: save-audit-report
         if: always()        
