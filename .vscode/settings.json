@@ -1,0 +1,13 @@
+{
+    "yaml.maxItemsComputed": 50000,
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "docs/_data/*",
+                "isAsync": true,
+                // set npm_config_registry= to use a custom registry
+                "cmd": ".devcontainer/post.sh bundle"
+            }
+        ]
+    }
+}
