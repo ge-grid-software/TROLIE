@@ -2,7 +2,11 @@
 
 Transmission Ratings and Operating Limits Information Exchange
 
-[OpenAPI Specification docs](https://ge-grid-software.github.io/TROLIE/)
+# RELOCATION NOTICE
+The TROLIE specification has officially moved to a LF Energy.  Visit the website at https://trolie.energy/, or 
+the new home for this specification at https://github.com/trolie/spec.  
+
+
 
 ### License
 
